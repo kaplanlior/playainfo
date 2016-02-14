@@ -1,8 +1,9 @@
-# playainfo
-The the Playa Info Scheduler (תוכניה) that all theme camps, art installations and any other content provider in Midburn will participate in building.
+Playa Info
+----------
+The Playa Info Scheduler (תוכניה) that all theme camps, art installations and any other content provider in Midburn will participate in building.
 
-Initial product definition
---------------------------
+Product definition
+------------------
 
 This system will contain all activities offered throughout the Midburn event.
 
@@ -10,15 +11,13 @@ The system will be used by different content providers to gather information reg
 
 The providers of the information are:
 
-1. Theme camp leaders - Each team leader adds the entire schedule of events happening in the camp throughout Midburn 
-
+1. Theme camps - Each cammp adds the entire schedule of events happening in the camp throughout Midburn
 2. Art department - Adding art related events (where offered by the art installation). This includes the burning of art installations.
-
 3. The Salon - Salon Manager will add all events planned throughout Midburn.
-
 4. Production - Production related events and others.
 
-Admin Interface:
+Admin Interface
+---------------
 
 1. Management of groups:
 
