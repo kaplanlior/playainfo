@@ -9,7 +9,8 @@ This system will contain all activities offered throughout the Midburn event.
 
 The system will be used by different content providers to gather information regarding each event and project, be it a one-time-event, continuous event, daily or any other. 
 
-The providers of the information are:
+Content Providers
+-----------------
 
 1. Theme camps - Each cammp adds the entire schedule of events happening in the camp throughout Midburn
 2. Art department - Adding art related events (where offered by the art installation). This includes the burning of art installations.
