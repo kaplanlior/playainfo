@@ -1,0 +1,39 @@
+<template name="addEventPage">
+	<title>Add Events</title>
+	<div class="background">
+		<div class="header">Add Events</div>
+		<div class="container">
+			<div class="forms">
+				<div class="backto">
+					<a href="events">Back to Existing events page</a>
+				</div><br>
+				<form class="addEvent">
+					<b>Create New Event</b> <br>
+					<input name="hebrew_title" type="text"> 
+					<label for="hebrew_title">Title - Hebrew</label> <br>
+					<input name="english_title" type="text"> 
+					<label for="english_title">Title - English</label> <br>
+					<input id="datetimepicker" type="datetime-local" name="start_date" class="start_date">
+					<label for="start_date">Start</label> <br>
+					<input id="datetimepicker2" type="datetime-local" name="end_date" class="end_date">
+					<label for="end_date">End</label> <br>
+<!-- 					<input id="datetimepicker" type="text" name="start_date" class="start_date">
+					<label for="start_date">Start</label> <br>
+					<input id="datetimepicker2" type="text" name="end_date" class="end_date">
+					<label for="end_date">End</label> <br> -->
+					<input name="recurring" type="checkbox">
+					<label for="recurring">Recurring</label><br>
+					<input name="whole_day" type="checkbox">
+					<label for="whole_day">All Day</label><br>
+					<textarea rows="5" name="hebrew_description"></textarea>
+					<label for="hebrew_description">Description - Hebrew</label> <br>
+					<textarea rows="5" name="english_description"></textarea>
+					<label for="english_description">Description - English</label> <br><br>
+					<button type="submit" class="submitevnt">Create</button> 
+					<br><br><br>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</template>
