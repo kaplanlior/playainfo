@@ -1,0 +1,45 @@
+<template name="provider">
+  <tr>
+    <td>{{name}}</td>
+    <td>{{nameHebrew}}</td>
+    <td>{{type}}</td>
+    <td>
+      <td>
+       <span class="icon-pencil" id="edit"></span>
+       <span class="icon-calendar" id="pr-events"></span>
+       <span class="icon-trash providerDeleteButton" id="delete"></span>
+     </td>
+   </td>
+ </tr>
+</template>
+
+<template name="viewProvidersPage">
+  <div class="background">
+    <div class="header">Content Providers Management</div>
+    <div class="main-menu">
+      <div class="menu-button"><a href="">Main</a></div>
+      <div class="menu-button"><a href="add-providers">Add</a></div>
+      <div class="menu-button"><a href="add-providers">Add Bulk</a></div>
+      <div class="menu-button"><a href="providers">Groups</a></div>
+    </div>
+    <div class="container">
+      <input type="search" class="search" placeholder="search provider name"> <input type="submit" value="search">
+      <button type="button" class="clean-pro providerDeleteAllButton"> <span class="icon-delete" id="clean-pro"></span> erase all</button> 
+      <div class="cptable">
+        <table>
+          <tr>
+            <th id="he-name">Hebrew Name</th>
+            <th id="en-name">English Name</th>		
+            <th>Content Group</th>
+            <th colspan="3">Actions</th>
+          </tr>
+          {{#each providersCollection}}
+          {{> provider}}
+          {{else}}
+          No providers, maybe you should do something about it.
+          {{/each}}
+        </table> 
+      </div>
+    </div>
+  </div>
+</template>

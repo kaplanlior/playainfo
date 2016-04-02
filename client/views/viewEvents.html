@@ -1,0 +1,68 @@
+<template name="event">
+	<tr>
+		<td>{{title}}</td>
+		<td>{{title_hebrew}}</td>
+		<td>{{formatTime start}}</td>
+		<td>{{formatTime end}}</td>
+		<td id="tdcf"></td>
+		<td id="tdcf"></td>
+		<td>
+			<span class="icon-pencil eventEditButton" id="edit"></span>
+			<span class="icon-trash eventDeleteButton" id="delete"></span>
+		</td>
+	</tr>
+</template>
+
+<template name="viewEventsPage">
+	<div class="background">
+		<div class="header">Events Management</div>
+		<div class="container">
+			<div class="hello">
+				<b>Hello [username], Welcome to Playainfo.</b> <br>
+				Here you can create and edit events belonging to [content provider]. <br><br>
+				<a href="add-event">
+					<button type="button" class="crt-evnt">Create New Event</button>
+				</a>
+			</div>
+
+			<br><br><br>
+			<input type="search" class="search-evnt-name" placeholder="search Event name">
+			<input type="submit" value="search">
+			<button type="button" class="eventDeleteAllButton clean-events">
+				<span class="icon-delete" id="clean-events"></span> erase all
+			</button> 
+
+			<div class="evnt-table">
+				<table>
+					<tr>
+						<th id="evnt-he-name">English</th>
+						<th id="evnt-en-name">Hebrew</th>		
+						<th>Start</th>
+						<th>End</th>
+						<th>Recurring</th>	
+						<th>All Day </th>		
+						<th colspan="3">Actions</th>
+					</tr>
+					{{#each eventsCollection}}
+					{{> event}}
+					{{else}}
+					No events, try adding some!
+					{{/each}}
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+
+<!-- 	<h2>events</h2>
+	{{#if Template.subscriptionsReady}}
+	{{#each eventsCollection}}
+	{{> event}}
+	{{else}}
+	No events, try adding some!
+	{{/each}}
+	{{else}}
+	<p>Loading...</p>
+	{{/if}} -->
+</template>
