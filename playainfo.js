@@ -1,11 +1,25 @@
 EventsCollection = new Mongo.Collection("events");
 ProvidersCollection = new Mongo.Collection("providers");
 
+var hebrewChars = new RegExp("^[\u0590-\u05FF]|\s+$");
+
 if (Meteor.isClient) {
 
-  Meteor.startup(function () {
-  });
-  
+  Meteor.startup(function() {});
+
+
+  $.validator.addMethod('hebrewText', function(value) {
+    if (!value) {
+      return true;
+    }
+    return hebrewChars.test(value);
+  }, 'Please enter a valid hebrew text.');
+
+  $.validator.addMethod("endDate", function(value, element) {
+    var startDate = $('.start_date').val();
+    return Date.parse(startDate) <= Date.parse(value) || value == "";
+  }, "End date must be after start date");
+
   Template.event.helpers({
     formatTime: function(rawTime) {
       return moment(rawTime).format();
@@ -13,40 +27,48 @@ if (Meteor.isClient) {
   });
 
   Template.viewEventsPage.events({
-    "click .eventDeleteButton": function () {
+    "click .eventDeleteButton": function() {
       Meteor.call("deleteEvent", this._id);
     },
 
-    "click .eventDeleteAllButton": function () {
+    "click .eventDeleteAllButton": function() {
       Meteor.call("deleteAllEvents");
     }
   });
-  
+
   Template.viewEventsPage.helpers({
     eventsCollection: function() {
-      return EventsCollection.find({}, {sort: {start: -1}});
+      return EventsCollection.find({}, {
+        sort: {
+          start: -1
+        }
+      });
     }
   });
 
   Template.viewProvidersPage.events({
-    "click .providerDeleteButton": function () {
+    "click .providerDeleteButton": function() {
       Meteor.call("deleteProvider", this._id);
     },
 
-    "click .providerDeleteAllButton": function () {
+    "click .providerDeleteAllButton": function() {
       Meteor.call("deleteAllProviders");
     }
   });
 
   Template.viewProvidersPage.helpers({
     providersCollection: function() {
-      return ProvidersCollection.find({}, {sort: {start: -1}});
+      return ProvidersCollection.find({}, {
+        sort: {
+          start: -1
+        }
+      });
     }
   });
 
 
   Template.addProvidersPage.events({
-    "submit .addProvider": function (formEvent) {
+    "submit .addProvider": function(formEvent) {
       formEvent.preventDefault();
 
       Meteor.call("addProvider", {
@@ -61,7 +83,7 @@ if (Meteor.isClient) {
   });
 
   Template.addEventPage.events({
-    "submit .addEvent": function (formEvent) {
+    "submit .addEvent": function(formEvent) {
       formEvent.preventDefault();
 
       Meteor.call("addEvent", {
@@ -80,6 +102,41 @@ if (Meteor.isClient) {
       formEvent.target.end_date.value = "";
     }
   });
+
+  Template.addEventPage.onRendered(function() {
+
+    $('.addEvent').validate({
+      errorElement: "span",
+      rules: {
+        english_title: {
+          minlength: 3,
+          required: true
+        },
+        hebrew_title: {
+          minlength: 3,
+          required: true,
+          hebrewText: true
+        },
+        hebrew_description: {
+          minlength: 10,
+          required: false,
+          hebrewText: true
+        },
+        english_description: {
+          minlength: 10,
+          required: true,
+          hebrewText: true
+        },
+        start_date: {
+          required: true
+        },
+        end_date: {
+          required: true,
+          endDate: true
+        }
+      }
+    });
+  });
 }
 
 if (Meteor.isServer) {
@@ -89,7 +146,7 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  addEvent: function (event) {
+  addEvent: function(event) {
     EventsCollection.insert({
       title: event.titleText,
       title_hebrew: event.title_hebrew,
@@ -100,19 +157,19 @@ Meteor.methods({
     });
   },
 
-  deleteEvent: function (eventId) {
+  deleteEvent: function(eventId) {
     EventsCollection.remove(eventId);
   },
 
-  deleteAllEvents: function () {
+  deleteAllEvents: function() {
     EventsCollection.remove({});
   },
 
-  deleteProvider: function (eventId) {
+  deleteProvider: function(eventId) {
     ProvidersCollection.remove(eventId);
   },
 
-  deleteAllProviders: function () {
+  deleteAllProviders: function() {
     ProvidersCollection.remove({});
   },
 
