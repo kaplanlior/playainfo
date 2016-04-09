@@ -124,8 +124,7 @@ if (Meteor.isClient) {
         },
         english_description: {
           minlength: 10,
-          required: true,
-          hebrewText: true
+          required: true
         },
         start_date: {
           required: true
