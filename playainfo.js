@@ -53,6 +53,12 @@ if (Meteor.isClient) {
 
     "click .providerDeleteAllButton": function() {
       Meteor.call("deleteAllProviders");
+    },
+
+    "click .providerEditButton": function() {
+      FlowRouter.go('editProvidersPageRoute', {
+        id: this._id
+      });
     }
   });
 
@@ -70,17 +76,48 @@ if (Meteor.isClient) {
   Template.addProvidersPage.events({
     "submit .addProvider": function(formEvent) {
       formEvent.preventDefault();
-
-      Meteor.call("addProvider", {
-        hebrewName: formEvent.target.hebrewName.value,
-        englishName: formEvent.target.englishName.value,
-        type: formEvent.target.typeSelector.value
-      });
-
-      formEvent.target.hebrewName.value = "";
-      formEvent.target.englishName.value = "";
+      var providerId = FlowRouter.getParam('id');
+      if (providerId) {
+        Meteor.call("updateProvider", {
+          id: providerId,
+          hebrewName: formEvent.target.hebrewName.value,
+          englishName: formEvent.target.englishName.value,
+          type: formEvent.target.typeSelector.value
+        });
+      } else {
+        Meteor.call("addProvider", {
+          hebrewName: formEvent.target.hebrewName.value,
+          englishName: formEvent.target.englishName.value,
+          type: formEvent.target.typeSelector.value
+        });
+      }
+      FlowRouter.go('viewProvidersPageRoute');
     }
   });
+
+  Template.addProvidersPage.onCreated(function() {
+    var self = this;
+    self.autorun(function() {
+      var id = FlowRouter.getParam('id');
+      self.subscribe("provider", id);
+    });
+  });
+
+  Template.addProvidersPage.helpers({
+    provider: function() {
+      return ProvidersCollection.findOne(FlowRouter.getParam('id'));
+    },
+    isEdit: function() {
+      return FlowRouter.getParam('id');
+    }
+  });
+
+  Template.viewProvidersPage.helpers({
+    isSelected: function(optionValue, realValue) {
+      return optionValue == realValue ? 'selected' : '';
+    }
+  });
+
 
   Template.addEventPage.events({
     "submit .addEvent": function(formEvent) {
@@ -139,9 +176,18 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+  // Uncomment below if autopublish is removed from project packages
+
   // Meteor.publish("EventsCollectionSub", function () {
   //   return EventsCollection.find();
   // });
+  // Meteor.publish('provider', function() {
+  //   return ProvidersCollection.find();
+  // });
+  // Meteor.publish('providers', function() {
+  //   return ProvidersCollection.find();
+  // });
+
 }
 
 Meteor.methods({
@@ -178,6 +224,16 @@ Meteor.methods({
       nameHebrew: provider.hebrewName,
       type: provider.type,
       createdAt: new Date() // current time
+    });
+  },
+  updateProvider: function(provider) {
+    ProvidersCollection.update(provider.id, {
+      $set: {
+        name: provider.englishName,
+        nameHebrew: provider.hebrewName,
+        type: provider.type,
+        modifiedAt: new Date() // current time },
+      }
     });
   }
 });
