@@ -1,58 +1,51 @@
 <template name="addProvidersPage">
-	<div class="background">
-		<div class="header">Content Providers Management</div>
-		<div class="main-menu">
-			<div class="menu-button"><a href="">Main</a></div>
-			<div class="menu-button"><a href="add-providers">Add</a></div>
-			<div class="menu-button"><a href="add-providers">Add Bulk</a></div>
-			<div class="menu-button"><a href="providers">Groups</a></div>
-		</div>
-		<div class="container">
+	<div class="header">Content Providers Management</div>
+	{{> mainMenu}}
+	<div class="container">
 
-			<form class="addProvider">
-				<div class="forms">
-					<b>Add Content Provider</b> <br>
-					<input name="hebrewName" type="text"> 
-					<label for="hebrewName">Hebrew Name</label> <br>
-					<input name="englishName" type="text">
-					<label for="englishName">English Name</label>  <br>
-					<label for="select">Type</label><br>
-					<div class="styled-select" >
-						<select name="typeSelector">
-							<option value="Camp">Camp</option>
-							<option value="Installation">Installation</option>
-							<option value="Salon">Salon</option>
-							<option value="Festival">Festival</option>
-						</select> 
-					</div><br>
-					<button type="submit" class="add">Add</button> 
-				</div>
-			</form>
-
+		<form class="addProvider">
 			<div class="forms">
-				<b>Add Content Providers</b> <br>
-				<input name="file" type="file"> <br><br>
-				<button type="button" class="upload">upload</button> <br><br>
-				<div class="error">some error massage</div>
-			</div>
-
-			<div class="forms">
-				<b>Add Content Provider Group</b> <br>
-				<input name="grp-name" type="text"> 
-				<label for="grp-name">Name</label> <br> <br>
-				<button type="button" class="add">Add</button>  <br> <br> <br> <br>
-				<b>Edit Content Group</b> <br>
-				<label for="edt-grp">Content Group</label><br>
-				<div class="styled-select">
-					<select>
-						<option value="cg1">content grop 1</option>
-						<option value="cg2">content grop 2</option>
-						<option value="cg3">content grop 3</option>
+				<b>Add Content Provider</b> <br>
+				<input name="hebrewName" type="text"> 
+				<label for="hebrewName">Hebrew Name</label> <br>
+				<input name="englishName" type="text">
+				<label for="englishName">English Name</label>  <br>
+				<label for="select">Type</label><br>
+				<div class="styled-select" >
+					<select name="typeSelector">
+						<option value="Camp">Camp</option>
+						<option value="Installation">Installation</option>
+						<option value="Salon">Salon</option>
+						<option value="Festival">Festival</option>
 					</select> 
 				</div><br>
-				<button type="button" class="clean">clean</button>
+				<button type="submit" class="add">Add</button> 
 			</div>
+		</form>
 
+<!-- 		<div class="forms">
+			<b>Add Content Providers</b> <br>
+			<input name="file" type="file"> <br><br>
+			<button type="button" class="upload">upload</button> <br><br>
+			<div class="error">some error massage</div>
 		</div>
+
+		<div class="forms">
+			<b>Add Content Provider Group</b> <br>
+			<input name="grp-name" type="text"> 
+			<label for="grp-name">Name</label> <br> <br>
+			<button type="button" class="add">Add</button>  <br> <br> <br> <br>
+			<b>Edit Content Group</b> <br>
+			<label for="edt-grp">Content Group</label><br>
+			<div class="styled-select">
+				<select>
+					<option value="cg1">content grop 1</option>
+					<option value="cg2">content grop 2</option>
+					<option value="cg3">content grop 3</option>
+				</select> 
+			</div><br>
+			<button type="button" class="clean">clean</button>
+		</div> -->
+
 	</div>
 </template>

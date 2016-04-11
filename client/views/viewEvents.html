@@ -14,42 +14,41 @@
 </template>
 
 <template name="viewEventsPage">
-	<div class="background">
-		<div class="header">Events Management</div>
-		<div class="container">
-			<div class="hello">
-				<b>Hello [username], Welcome to Playainfo.</b> <br>
-				Here you can create and edit events belonging to [content provider]. <br><br>
-				<a href="add-event">
-					<button type="button" class="crt-evnt">Create New Event</button>
-				</a>
-			</div>
+{{#with provider}}
+	<div class="header">Events Management - {{name}} - {{type}}</div>
+	<div class="container">
+		<div class="hello">
+			<b>Hello, Welcome to Playainfo.</b> <br>
+			Here you can create and edit events belonging to {{name}}. <br><br>
+			<a href="/add-event/{{uuid}}">
+				<button type="button" class="crt-evnt">Create New Event</button>
+			</a>
+		</div>
 
-			<br><br><br>
-			<input type="search" class="search-evnt-name" placeholder="search Event name">
-			<input type="submit" value="search">
-			<button type="button" class="eventDeleteAllButton clean-events">
-				<span class="icon-delete" id="clean-events"></span> erase all
-			</button> 
+		<br><br><br>
+		<input type="search" class="search-evnt-name" placeholder="search Event name">
+		<input type="submit" value="search">
+		<button type="button" class="eventDeleteAllButton clean-events">
+			<span class="icon-delete" id="clean-events"></span> erase all
+		</button> 
 
-			<div class="evnt-table">
-				<table>
-					<tr>
-						<th id="evnt-he-name">English</th>
-						<th id="evnt-en-name">Hebrew</th>		
-						<th>Start</th>
-						<th>End</th>
-						<th>Recurring</th>	
-						<th>All Day </th>		
-						<th colspan="3">Actions</th>
-					</tr>
-					{{#each eventsCollection}}
-					{{> event}}
-					{{else}}
-					No events, try adding some!
-					{{/each}}
-				</table>
-			</div>
+		<div class="evnt-table">
+			<table>
+				<tr>
+					<th id="evnt-he-name">English</th>
+					<th id="evnt-en-name">Hebrew</th>		
+					<th>Start</th>
+					<th>End</th>
+					<th>Recurring</th>	
+					<th>All Day </th>		
+					<th colspan="3">Actions</th>
+				</tr>
+				{{#each events}}
+				{{> event}}
+				{{else}}
+				No events, try adding some!
+				{{/each}}
+			</table>
 		</div>
 	</div>
 
@@ -65,4 +64,5 @@
 	{{else}}
 	<p>Loading...</p>
 	{{/if}} -->
+	{{/with}}
 </template>

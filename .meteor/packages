@@ -24,3 +24,9 @@ localstorage
 standard-minifier-css
 standard-minifier-js
 momentjs:moment
+harrison:papa-parse
+pfafman:filesaver
+deanius:promise
+accounts-password
+accounts-ui
+jaywon:meteor-node-uuid
