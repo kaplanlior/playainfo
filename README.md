@@ -6,7 +6,7 @@ The Playa Info Scheduler (תוכניה) that all theme camps, art installations 
 * [User Stories & Mockups](https://github.com/Midburn/playainfo/milestones)
 * [Spec](https://docs.google.com/document/d/1SZektMPjJW5ZEpGdVJy-PspRC7a0nkpdKjE8J1VgCCs/edit#heading=h.8jzqamlwd4la)
 
-Production ETA: sometime in April (see ETA [per milestone](https://github.com/Midburn/playainfo/milestones)).
+Production ETA: April 17 (see ETA [per milestone](https://github.com/Midburn/playainfo/milestones)).
 
 How to contribute
 -----------------
