@@ -11,7 +11,7 @@ Production ETA: April 17 (see ETA [per milestone](https://github.com/Midburn/pla
 How to contribute
 -----------------
 
-- We chat on Slack, email Ron Gross (ron@fractalvillage.org) or Alex Motenko for an invite.
+- We chat [on Slack](https://www.hamsterpad.com/chat/midburnos) in #playainfo.
 - Read our milestones and issues, and submit pull requests.
 - QA QA QA ... just play with the system and open issues on github if something isn't working.
 
