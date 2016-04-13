@@ -2,13 +2,16 @@
 	<div class="header">Content Providers Management</div>
 	{{> mainMenu}}
 	<div class="container">
-
 		<form class="addProvider">
 			<div class="forms">
-				<b>Add Content Provider</b> <br>
-				<input name="hebrewName" type="text"> 
+					{{#if Template.subscriptionsReady}}
+						<b>{{ action }} Content Provider {{provider.name}}</b> <br>
+					{{else}}
+						Loading...
+					{{/if}}
+					<input name="hebrewName" type="text" value="{{provider.nameHebrew}}">
 				<label for="hebrewName">Hebrew Name</label> <br>
-				<input name="englishName" type="text">
+					<input name="englishName" type="text" value="{{provider.name}}">
 				<label for="englishName">English Name</label>  <br>
 				<label for="select">Type</label><br>
 				<div class="styled-select" >
@@ -19,7 +22,11 @@
 						<option value="Festival">Festival</option>
 					</select> 
 				</div><br>
-				<button type="submit" class="add">Add</button> 
+					{{#if isEdit}}
+					<button type="submit" class="saveProvider">Save Changes</button>
+					{{else}}
+					<button type="submit" class="addProvider">Create</button>
+					{{/if}} 
 			</div>
 		</form>
 
