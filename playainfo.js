@@ -275,7 +275,14 @@ Meteor.methods({
   },
 
   exportProviders: function() {
-    col = ProvidersCollection.find().map(function(u) {return u;});
+    col = ProvidersCollection.find().map(
+      function(u) {
+        return {
+          'English name': u.name,
+          'hebrew Name': u.nameHebrew,
+          'Access Link': 'http://playainfo.midburn.org/events/' + u.uuid,
+        };
+      });
     csv = Papa.unparse(col);
     return csv;
   },
