@@ -25,6 +25,7 @@ standard-minifier-css
 standard-minifier-js
 momentjs:moment
 harrison:papa-parse
+themeteorchef:jquery-validation
 pfafman:filesaver
 deanius:promise
 accounts-password

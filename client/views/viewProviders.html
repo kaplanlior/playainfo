@@ -5,7 +5,7 @@
     <td>{{type}}</td>
     <td>
       <td>
-       <span class="icon-pencil" id="edit"></span>
+       <span class="icon-pencil providerEditButton" id="edit"></span>
        <span class="icon-trash providersDeleteButton" id="delete"></span>
      </td>
    </td>
@@ -26,16 +26,20 @@
     <div class="cptable">
       <table>
         <tr>
+          <th id="en-name">English Name</th>    
           <th id="he-name">Hebrew Name</th>
-          <th id="en-name">English Name</th>		
           <th>Content Group</th>
           <th colspan="3">Actions</th>
         </tr>
-        {{#each providers}}
-        {{> provider}}
+        {{#if Template.subscriptionsReady}}
+          {{#each providers}}
+            {{> provider}}
+          {{else}}
+            No providers, maybe you should do something about it.
+          {{/each}}
         {{else}}
-        No providers, maybe you should do something about it.
-        {{/each}}
+          Loading...
+        {{/if}}
       </table> 
     </div>
   </div>

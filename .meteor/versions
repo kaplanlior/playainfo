@@ -80,6 +80,7 @@ session@1.1.4
 sha@1.0.6
 spacebars@1.0.10
 spacebars-compiler@1.0.10
+themeteorchef:jquery-validation@1.14.0
 srp@1.0.7
 standard-minifier-css@1.0.5
 standard-minifier-js@1.0.5
