@@ -4,14 +4,14 @@
 	<div class="container">
 		<form class="addProvider">
 			<div class="forms">
-					{{#if Template.subscriptionsReady}}
-						<b>{{ action }} Content Provider {{provider.name}}</b> <br>
-					{{else}}
-						Loading...
-					{{/if}}
-					<input name="hebrewName" type="text" value="{{provider.nameHebrew}}">
+				{{#if Template.subscriptionsReady}}
+					<b>{{ action }} Content Provider {{provider.name}}</b> <br>
+				{{else}}
+					Loading...
+				{{/if}}
+				<input name="hebrewName" type="text" value="{{provider.nameHebrew}}">
 				<label for="hebrewName">Hebrew Name</label> <br>
-					<input name="englishName" type="text" value="{{provider.name}}">
+				<input name="englishName" type="text" value="{{provider.name}}">
 				<label for="englishName">English Name</label>  <br>
 				<label for="select">Type</label><br>
 				<div class="styled-select" >
@@ -22,11 +22,11 @@
 						<option value="Festival">Festival</option>
 					</select> 
 				</div><br>
-					{{#if isEdit}}
+				{{#if isEdit}}
 					<button type="submit" class="saveProvider">Save Changes</button>
-					{{else}}
+				{{else}}
 					<button type="submit" class="addProvider">Create</button>
-					{{/if}} 
+				{{/if}} 
 			</div>
 		</form>
 

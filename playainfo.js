@@ -31,10 +31,10 @@ if (Meteor.isClient) {
     return hebrewChars.test(value);
   }, 'Please enter a valid hebrew text.');
 
-  $.validator.addMethod("endDate", function(value, element) {
-    var startDate = $('.start_date').val();
-    return Date.parse(startDate) <= Date.parse(value) || value == "";
-  }, "End date must be after start date");
+  $.validator.addMethod('endDate', function(value, element) {
+    startDate = $('.start_date').val();
+    return Date.parse(startDate) <= Date.parse(value) || value === '';
+  }, 'End date must be after start date');
 
   Template.registerHelper('formatTime', function(rawTime) {
     return moment(rawTime).format();
@@ -80,11 +80,12 @@ if (Meteor.isClient) {
       // TODO add new Date() to filename
       saveAs(blob, 'providers.csv');
     },
-    "click .providerEditButton": function() {
+
+    'click .providerEditButton': function() {
       FlowRouter.go('editProvidersPageRoute', {
-        id: this._id
+        id: this._id,
       });
-    }
+    },
   });
 
   Template.viewProvidersPage.helpers({
@@ -96,30 +97,30 @@ if (Meteor.isClient) {
   Template.addProvidersPage.events({
     'submit .addProvider': function(formEvent) {
       formEvent.preventDefault();
-      var providerId = FlowRouter.getParam('id');
+      providerId = FlowRouter.getParam('id');
       if (providerId) {
-        Meteor.call("updateProvider", {
+        Meteor.call('updateProvider', {
           id: providerId,
           hebrewName: formEvent.target.hebrewName.value,
           englishName: formEvent.target.englishName.value,
-          type: formEvent.target.typeSelector.value
+          type: formEvent.target.typeSelector.value,
         });
       } else {
-        Meteor.call("addProvider", {
+        Meteor.call('addProvider', {
           hebrewName: formEvent.target.hebrewName.value,
           englishName: formEvent.target.englishName.value,
-          type: formEvent.target.typeSelector.value
+          type: formEvent.target.typeSelector.value,
         });
       }
       FlowRouter.go('viewProvidersPageRoute');
-    }
+    },
   });
 
   Template.addProvidersPage.onCreated(function() {
     var self = this;
     self.autorun(function() {
       var id = FlowRouter.getParam('id');
-      self.subscribe("provider", id);
+      self.subscribe('provider', id);
     });
   });
 
@@ -129,15 +130,15 @@ if (Meteor.isClient) {
     },
     isEdit: function() {
       return FlowRouter.getParam('id');
-    }
+    },
   });
 
-    Template.addEventPage.helpers({
+  Template.addEventPage.helpers({
     provider: function() {
       return getProvider();
     },
   });
-  
+
   Template.viewProvidersPage.helpers({
     isSelected: function(optionValue, realValue) {
       return optionValue == realValue ? 'selected' : '';
@@ -167,36 +168,35 @@ if (Meteor.isClient) {
   });
 
   Template.addEventPage.onRendered(function() {
-
     $('.addEvent').validate({
-      errorElement: "span",
+      errorElement: 'span',
       rules: {
         english_title: {
           minlength: 3,
-          required: true
+          required: true,
         },
         hebrew_title: {
           minlength: 3,
           required: true,
-          hebrewText: true
+          hebrewText: true,
         },
         hebrew_description: {
           minlength: 10,
           required: false,
-          hebrewText: true
+          hebrewText: true,
         },
         english_description: {
           minlength: 10,
-          required: true
+          required: true,
         },
         start_date: {
-          required: true
+          required: true,
         },
         end_date: {
           required: true,
-          endDate: true
-        }
-      }
+          endDate: true,
+        },
+      },
     });
   });
 }
@@ -254,15 +254,17 @@ Meteor.methods({
       type: provider.type,
       createdAt: new Date(),
       uuid: uuid.v4(),
+    });
   },
+
   updateProvider: function(provider) {
     ProvidersCollection.update(provider.id, {
       $set: {
         name: provider.englishName,
         nameHebrew: provider.hebrewName,
         type: provider.type,
-        modifiedAt: new Date() // current time },
-      }
+        modifiedAt: new Date(), // current time },
+      },
     });
   },
 

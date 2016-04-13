@@ -26,21 +26,20 @@
     <div class="cptable">
       <table>
         <tr>
+          <th id="en-name">English Name</th>    
           <th id="he-name">Hebrew Name</th>
-          <th id="en-name">English Name</th>		
           <th>Content Group</th>
           <th colspan="3">Actions</th>
         </tr>
-          {{#if Template.subscriptionsReady}}
-        {{#each providers}}
-        {{> provider}}
-        {{else}}
-        No providers, maybe you should do something about it.
-        {{/each}}
+        {{#if Template.subscriptionsReady}}
+          {{#each providers}}
+            {{> provider}}
           {{else}}
-            Loading...
-          {{/if}}
-          
+            No providers, maybe you should do something about it.
+          {{/each}}
+        {{else}}
+          Loading...
+        {{/if}}
       </table> 
     </div>
   </div>
