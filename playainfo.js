@@ -1,9 +1,7 @@
 EventsCollection = new Mongo.Collection('events');
 ProvidersCollection = new Mongo.Collection('providers');
 
-var hebrewChars = new RegExp("^[\u0590-\u05FF]|\s+$");
-
-function getProviderUuidByUrl() {
+function getProviderUuidByUrl() { //TODO over the top with the validatipon?
   uuid = '';
   try {
     uuid = FlowRouter.getParam('uuid');
@@ -22,19 +20,6 @@ function getProvider() {
 if (Meteor.isClient) {
   Meteor.startup(function() {
   });
-
-
-  $.validator.addMethod('hebrewText', function(value) {
-    if (!value) {
-      return true;
-    }
-    return hebrewChars.test(value);
-  }, 'Please enter a valid hebrew text.');
-
-  $.validator.addMethod('endDate', function(value, element) {
-    startDate = $('.start_date').val();
-    return Date.parse(startDate) <= Date.parse(value) || value === '';
-  }, 'End date must be after start date');
 
   Template.registerHelper('formatTime', function(rawTime) {
     return moment(rawTime).format();
@@ -117,17 +102,19 @@ if (Meteor.isClient) {
   });
 
   Template.addProvidersPage.onCreated(function() {
-    var self = this;
-    self.autorun(function() {
-      var id = FlowRouter.getParam('id');
-      self.subscribe('provider', id);
-    });
+    // var self = this;
+    // self.autorun(function() {
+    //   var id = FlowRouter.getParam('id');
+    //   self.subscribe('provider', id);
+    // });
   });
 
   Template.addProvidersPage.helpers({
     provider: function() {
-      return ProvidersCollection.findOne(FlowRouter.getParam('id'));
+      id = FlowRouter.getParam('id');
+      return ProvidersCollection.findOne(id);
     },
+
     isEdit: function() {
       return FlowRouter.getParam('id');
     },
