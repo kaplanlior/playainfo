@@ -1,13 +1,14 @@
 <template name="addProvidersPage">
+	{{#with provider}}
 	<div class="header">Content Providers Management</div>
 	{{> mainMenu}}
 	<div class="container">
 		<form class="addProvider">
 			<div class="forms">
 				{{#if Template.subscriptionsReady}}
-					<b>{{ action }} Content Provider {{provider.name}}</b> <br>
+				<b>{{ action }} Content Provider {{provider.name}}</b> <br>
 				{{else}}
-					Loading...
+				Loading...
 				{{/if}}
 				<input name="hebrewName" type="text" value="{{provider.nameHebrew}}">
 				<label for="hebrewName">Hebrew Name</label> <br>
@@ -16,43 +17,18 @@
 				<label for="select">Type</label><br>
 				<div class="styled-select" >
 					<select name="typeSelector">
-						<option value="Camp">Camp</option>
-						<option value="Installation">Installation</option>
-						<option value="Salon">Salon</option>
-						<option value="Festival">Festival</option>
-					</select> 
+						{{#each option in options}}
+						<option value="{{option.value}}" selected={{isSelected option.value}}>{{option.label}}</option> 
+						{{/each}}
+					</select>
 				</div><br>
 				{{#if isEdit}}
-					<button type="submit" class="saveProvider">Save Changes</button>
+				<button type="submit" class="saveProvider">Save Changes</button>
 				{{else}}
-					<button type="submit" class="addProvider">Create</button>
+				<button type="submit" class="addProvider">Create</button>
 				{{/if}} 
 			</div>
 		</form>
-
-<!-- 		<div class="forms">
-			<b>Add Content Providers</b> <br>
-			<input name="file" type="file"> <br><br>
-			<button type="button" class="upload">upload</button> <br><br>
-			<div class="error">some error massage</div>
-		</div>
-
-		<div class="forms">
-			<b>Add Content Provider Group</b> <br>
-			<input name="grp-name" type="text"> 
-			<label for="grp-name">Name</label> <br> <br>
-			<button type="button" class="add">Add</button>  <br> <br> <br> <br>
-			<b>Edit Content Group</b> <br>
-			<label for="edt-grp">Content Group</label><br>
-			<div class="styled-select">
-				<select>
-					<option value="cg1">content grop 1</option>
-					<option value="cg2">content grop 2</option>
-					<option value="cg3">content grop 3</option>
-				</select> 
-			</div><br>
-			<button type="button" class="clean">clean</button>
-		</div> -->
-
 	</div>
+	{{/with}}
 </template>

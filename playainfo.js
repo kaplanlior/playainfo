@@ -1,14 +1,15 @@
 EventsCollection = new Mongo.Collection('events');
 ProvidersCollection = new Mongo.Collection('providers');
+// TODO move to collection once we need to work with new types
+ProviderTypesCollection = [
+  {value: 'Camp', label: 'Camp'},
+  {value: 'Installation', label: 'Installation'},
+  {value: 'Salon', label: 'Salon'},
+  {value: 'Production', label: 'Production'},
+];
 
-function getProviderUuidByUrl() { //TODO over the top with the validatipon?
-  uuid = '';
-  try {
-    uuid = FlowRouter.getParam('uuid');
-  } catch (e) {
-    log('Attempted to extract provider uuid from invalid URL');
-  }
-  return uuid;
+function getProviderUuidByUrl() {
+  return FlowRouter.getParam('uuid');
 }
 
 function getProvider() {
@@ -111,12 +112,22 @@ if (Meteor.isClient) {
 
   Template.addProvidersPage.helpers({
     provider: function() {
+      // if no id is found we are adding a new provider,
+      // return empty object for context
       id = FlowRouter.getParam('id');
-      return ProvidersCollection.findOne(id);
+      return (id) ? ProvidersCollection.findOne(id) : {};
     },
 
     isEdit: function() {
       return FlowRouter.getParam('id');
+    },
+
+    isSelected: function(value) {
+      return (value === this.type);
+    },
+
+    options: function() {
+      return ProviderTypesCollection;
     },
   });
 
@@ -125,13 +136,6 @@ if (Meteor.isClient) {
       return getProvider();
     },
   });
-
-  Template.viewProvidersPage.helpers({
-    isSelected: function(optionValue, realValue) {
-      return optionValue == realValue ? 'selected' : '';
-    }
-  });
-
 
   Template.addEventPage.events({
     'submit .addEvent': function(formEvent) {
@@ -152,39 +156,6 @@ if (Meteor.isClient) {
       formEvent.target.start_date.value = '';
       formEvent.target.end_date.value = '';
     },
-  });
-
-  Template.addEventPage.onRendered(function() {
-    $('.addEvent').validate({
-      errorElement: 'span',
-      rules: {
-        english_title: {
-          minlength: 3,
-          required: true,
-        },
-        hebrew_title: {
-          minlength: 3,
-          required: true,
-          hebrewText: true,
-        },
-        hebrew_description: {
-          minlength: 10,
-          required: false,
-          hebrewText: true,
-        },
-        english_description: {
-          minlength: 10,
-          required: true,
-        },
-        start_date: {
-          required: true,
-        },
-        end_date: {
-          required: true,
-          endDate: true,
-        },
-      },
-    });
   });
 }
 
