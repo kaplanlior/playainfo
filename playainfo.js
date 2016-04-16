@@ -28,10 +28,24 @@ if (Meteor.isClient) {
 
   Template.viewEventsPage.events({
     'click .eventDeleteButton': function() {
+      Bert.alert({
+        title: 'Action successful',
+        message: 'Successfully removed the event',
+        type: 'warning',
+        style: 'growl-top-right',
+        icon: 'fa-thumbs-up'
+      });
       Meteor.call('deleteEvent', this._id);
     },
 
-    'click .eventDeleteAllButton': function() {
+    'click .eventDeleteAllButton': function() {      
+      Bert.alert({
+        title: 'Action successful',
+        message: 'Successfully removed all events',
+        type: 'warning',
+        style: 'growl-top-right',
+        icon: 'fa-thumbs-up'
+      });
       Meteor.call('deleteAllProviderEvents', this.uuid);
     },
   });
@@ -54,10 +68,24 @@ if (Meteor.isClient) {
   Template.viewProvidersPage.events({
     'click .providersDeleteButton': function() {
       Meteor.call('deleteProvider', this.uuid);
+      Bert.alert({
+        title: 'Action successful',
+        message: 'Successfully removed provider',
+        type: 'warning',
+        style: 'growl-top-right',
+        icon: 'fa-thumbs-up'
+      });
     },
 
     'click .providersDeleteAllButton': function() {
       Meteor.call('deleteAllProviders');
+      Bert.alert({
+        title: 'Action successful',
+        message: 'Successfully removed all providers',
+        type: 'warning',
+        style: 'growl-top-right',
+        icon: 'fa-thumbs-up'
+      });
     },
 
     'click .providersExport': async function() {
@@ -98,6 +126,14 @@ if (Meteor.isClient) {
           type: formEvent.target.typeSelector.value,
         });
       }
+      var action = providerId ? 'saved' : 'added';
+      Bert.alert({
+        title: 'Action successful',
+        message: 'Successfully '+action+' a provider',
+        type: 'info',
+        style: 'growl-top-right',
+        icon: 'fa-thumbs-up'
+      });
       FlowRouter.go('viewProvidersPageRoute');
     },
   });
@@ -148,6 +184,14 @@ if (Meteor.isClient) {
         start: formEvent.target.start_date.value,
         end: formEvent.target.end_date.value,
         uuid: FlowRouter.getParam('uuid'),
+      });
+
+      Bert.alert({
+        title: 'Action successful',
+        message: 'Succcessfully added an event',
+        type: 'info',
+        style: 'growl-top-right',
+        icon: 'fa-thumbs-up'
       });
 
       formEvent.target.hebrew_title.value = '';
