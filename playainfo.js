@@ -2,10 +2,10 @@ EventsCollection = new Mongo.Collection('events');
 ProvidersCollection = new Mongo.Collection('providers');
 // TODO move to collection once we need to work with new types
 ProviderTypesCollection = [
-  {value: 'Camp', label: 'Camp'},
-  {value: 'Installation', label: 'Installation'},
-  {value: 'Salon', label: 'Salon'},
-  {value: 'Production', label: 'Production'},
+{value: 'Camp', label: 'Camp'},
+{value: 'Installation', label: 'Installation'},
+{value: 'Salon', label: 'Salon'},
+{value: 'Production', label: 'Production'},
 ];
 
 function getProviderUuidByUrl() {
@@ -28,24 +28,48 @@ if (Meteor.isClient) {
 
   Template.viewEventsPage.events({
     'click .eventDeleteButton': function() {
-      Bert.alert({
-        title: 'Action successful',
-        message: 'Successfully removed the event',
-        type: 'warning',
-        style: 'growl-top-right',
-        icon: 'fa-thumbs-up'
+      id = this._id;
+      new Confirmation({
+        message: 'Delete event?',
+        title: 'Confirmation',
+        cancelText: 'Cancel',
+        okText: 'Ok',
+        success: false,
+        focus: 'cancel',
+      }, function(ok) {
+        if (ok) {
+          Meteor.call('deleteEvent', id);
+          Bert.alert({
+            title: 'Action successful',
+            message: 'Successfully removed event',
+            type: 'warning',
+            style: 'growl-top-right',
+            icon: 'fa-thumbs-up',
+          });
+        }
       });
-      Meteor.call('deleteEvent', this._id);
     },
 
     'click .eventDeleteAllButton': function() {
-      Meteor.call('deleteAllProviderEvents', this.uuid);
-      Bert.alert({
-        title: 'Action successful',
-        message: 'Successfully removed all events',
-        type: 'warning',
-        style: 'growl-top-right',
-        icon: 'fa-thumbs-up',
+      uuid = this.uuid;
+      new Confirmation({
+        message: 'Delete all events?',
+        title: 'Confirmation',
+        cancelText: 'Cancel',
+        okText: 'Ok',
+        success: false,
+        focus: 'cancel',
+      }, function(ok) {
+        if (ok) {
+          Meteor.call('deleteAllProviderEvents', uuid);
+          Bert.alert({
+            title: 'Action successful',
+            message: 'Successfully removed all events',
+            type: 'warning',
+            style: 'growl-top-right',
+            icon: 'fa-thumbs-up',
+          });
+        }
       });
     },
 
@@ -55,8 +79,6 @@ if (Meteor.isClient) {
         id: this._id,
       });
     },
-
-
   });
 
   Template.viewEventsPage.helpers({
@@ -76,24 +98,47 @@ if (Meteor.isClient) {
 
   Template.viewProvidersPage.events({
     'click .providersDeleteButton': function() {
-      Meteor.call('deleteProvider', this.uuid);
-      Bert.alert({
-        title: 'Action successful',
-        message: 'Successfully removed provider',
-        type: 'warning',
-        style: 'growl-top-right',
-        icon: 'fa-thumbs-up',
+      uuid = this.uuid;
+      new Confirmation({
+        message: 'Delete provider?',
+        title: 'Confirmation',
+        cancelText: 'Cancel',
+        okText: 'Ok',
+        success: false,
+        focus: 'cancel',
+      }, function(ok) {
+        if (ok) {
+          Meteor.call('deleteProvider', uuid);
+          Bert.alert({
+            title: 'Action successful',
+            message: 'Successfully removed provider',
+            type: 'warning',
+            style: 'growl-top-right',
+            icon: 'fa-thumbs-up',
+          });
+        }
       });
     },
 
     'click .providersDeleteAllButton': function() {
-      Meteor.call('deleteAllProviders');
-      Bert.alert({
-        title: 'Action successful',
-        message: 'Successfully removed all providers',
-        type: 'warning',
-        style: 'growl-top-right',
-        icon: 'fa-thumbs-up',
+      new Confirmation({
+        message: 'Delete all providers?',
+        title: 'Confirmation',
+        cancelText: 'Cancel',
+        okText: 'Ok',
+        success: false,
+        focus: 'cancel',
+      }, function(ok) {
+        if (ok) {
+          Meteor.call('deleteAllProviders');
+          Bert.alert({
+            title: 'Action successful',
+            message: 'Successfully removed all providers',
+            type: 'warning',
+            style: 'growl-top-right',
+            icon: 'fa-thumbs-up',
+          });
+        }
       });
     },
 
