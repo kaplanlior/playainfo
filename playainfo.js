@@ -23,7 +23,7 @@ if (Meteor.isClient) {
   });
 
   Template.registerHelper('formatTime', function(rawTime) {
-    return moment(rawTime).format();
+    return moment(rawTime).format('DD/MM/YY - HH:MM');
   });
 
   Template.viewEventsPage.events({
@@ -34,6 +34,15 @@ if (Meteor.isClient) {
     'click .eventDeleteAllButton': function() {
       Meteor.call('deleteAllProviderEvents', this.uuid);
     },
+
+    'click .eventEditButton': function() {
+      FlowRouter.go('editEventPageRoute', {
+        uuid: this.uuid,
+        id: this._id,
+      });
+    },
+
+
   });
 
   Template.viewEventsPage.helpers({
@@ -135,26 +144,45 @@ if (Meteor.isClient) {
     provider: function() {
       return getProvider();
     },
+
+    event: function() {
+      id = FlowRouter.getParam('id');
+      result = EventsCollection.findOne(id);
+      return (result) ? result : {};
+    },
   });
 
   Template.addEventPage.events({
     'submit .addEvent': function(formEvent) {
       formEvent.preventDefault();
+      id = FlowRouter.getParam('id');
 
-      Meteor.call('addEvent', {
-        title_hebrew: formEvent.target.hebrew_title.value,
-        titleText: formEvent.target.english_title.value,
-        titleDesc: formEvent.target.english_description.value,
-        start: formEvent.target.start_date.value,
-        end: formEvent.target.end_date.value,
+      if (id) {
+        Meteor.call('updateEvent', {
+          title: formEvent.target.english_title.value,
+          title_hebrew: formEvent.target.hebrew_title.value,
+          desc: formEvent.target.english_desc.value,
+          desc_hebrew: formEvent.target.hebrew_desc.value,
+          start: formEvent.target.start_date.value,
+          end: formEvent.target.end_date.value,
+          uuid: FlowRouter.getParam('uuid'),
+          id: id,
+        });
+      } else {
+        Meteor.call('addEvent', {
+          title: formEvent.target.english_title.value,
+          title_hebrew: formEvent.target.hebrew_title.value,
+          desc: formEvent.target.english_desc.value,
+          desc_hebrew: formEvent.target.hebrew_desc.value,
+          start: formEvent.target.start_date.value,
+          end: formEvent.target.end_date.value,
+          uuid: FlowRouter.getParam('uuid'),
+        });
+      }
+
+      FlowRouter.go('eventsPageRoute', {
         uuid: FlowRouter.getParam('uuid'),
       });
-
-      formEvent.target.hebrew_title.value = '';
-      formEvent.target.english_title.value = '';
-      formEvent.target.english_description.value = '';
-      formEvent.target.start_date.value = '';
-      formEvent.target.end_date.value = '';
     },
   });
 }
@@ -177,14 +205,32 @@ if (Meteor.isServer) {
 Meteor.methods({
   addEvent: function(event) {
     EventsCollection.insert({
-      title: event.titleText,
+      title: event.title,
       title_hebrew: event.title_hebrew,
-      description: event.titleDesc,
-      start: new Date(event.start),
-      end: new Date(event.end),
+      desc: event.desc,
+      desc_hebrew: event.desc_hebrew,
+      start: event.start,
+      end: event.end,
       uuid: event.uuid,
+      //TODO switch to moment.js?
+      //check compatability with mongo ordering
+      modifiedAt: new Date(),
       createdAt: new Date(),
     });
+  },
+
+  updateEvent: function(event) {
+    EventsCollection.update(event.id, {
+      $set: {
+        title: event.title,
+        title_hebrew: event.title_hebrew,
+        desc: event.desc,
+        desc_hebrew: event.desc_hebrew,
+        start: event.start,
+        end: event.end,
+        uuid: event.uuid,
+        modifiedAt: new Date(),
+      }});
   },
 
   deleteEvent: function(eventId) {
@@ -210,8 +256,9 @@ Meteor.methods({
       name: provider.englishName,
       nameHebrew: provider.hebrewName,
       type: provider.type,
-      createdAt: new Date(),
       uuid: uuid.v4(),
+      modifiedAt: new Date(),
+      createdAt: new Date(),
     });
   },
 

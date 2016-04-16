@@ -1,5 +1,5 @@
 <template name="addEventPage">
-{{#with provider}}
+	{{#with provider}}
 	<title>Add Events</title>
 	<div class="header">Add Events - {{name}} - {{type}}</div>
 	<div class="container">
@@ -7,31 +7,45 @@
 			<div class="backto">
 				<a href="/events/{{uuid}}">Back to Existing events page</a>
 			</div><br>
+			{{#with event}}
 			<form class="addEvent">
 				<b>Create New Event</b> <br>
-				<input name="hebrew_title" type="text"> 
+				<input name="hebrew_title" type="text" value="{{event.title_hebrew}}">
 				<label for="hebrew_title">Title - Hebrew</label> <br>
-				<input name="english_title" type="text"> 
+				<input name="english_title" type="text" value="{{event.title}}"> 
 				<label for="english_title">Title - English</label> <br>
-				<input id="datetimepicker" type="datetime-local" name="start_date" class="start_date">
+				<input id="datetimepicker" type="datetime-local" name="start_date" class="start_date" value="{{event.start}}">
 				<label for="start_date">Start</label> <br>
-				<input id="datetimepicker2" type="datetime-local" name="end_date" class="end_date">
+				<input id="datetimepicker2" type="datetime-local" name="end_date" class="end_date" value="{{event.end}}">
 				<label for="end_date">End</label> <br>
-				<!-- <input id="datetimepicker" type="text" name="start_date" class="start_date">
-				<label for="start_date">Start</label> <br>
-				<input id="datetimepicker2" type="text" name="end_date" class="end_date">
-				<label for="end_date">End</label> <br> -->
 				<input name="recurring" type="checkbox">
 				<label for="recurring">Recurring</label><br>
 				<input name="whole_day" type="checkbox">
 				<label for="whole_day">All Day</label><br>
-				<textarea rows="5" name="hebrew_description"></textarea>
-				<label for="hebrew_description">Description - Hebrew</label> <br>
-				<textarea rows="5" name="english_description"></textarea>
+				<textarea rows="5" name="hebrew_desc" value="{{event.desc_hebrew}}"></textarea>
+				<label for="hebrew_description">Description - Hebrew</label><br>
+				<textarea rows="5" name="english_desc" value="{{event.desc}}"></textarea>
 				<label for="english_description">Description - English</label> <br><br>
-				<button type="submit" class="submitevnt">Create</button> 
+<!-- 			TODO other fields
+				<input name="location" type="text" value="{{defaultLocation event.location}}"> //add default helper here
+				<input name="audience" type=option> //drop down
+				<input name="Movie" type="checkbox">
+				<input name="Music" type="checkbox">
+				<input name="Kids" type="checkbox">
+				<input name="Food" type="checkbox">
+				<input name="Workshop" type="checkbox">
+				<input name="Party" type="checkbox">
+				<input name="Adult" type="checkbox">
+				<input name="Live show" type="checkbox">
+				<input name="Game" type="checkbox">
+				<input name="Fire" type="checkbox">
+				<input name="Main event" type="checkbox">
+				<input name="Art" type="checkbox">
+				 -->
+				<button type="submit" class="submitevnt">Save</button>
 				<br><br><br>
 			</form>
+			{{/with}}
 		</div>
 	</div>
 	{{/with}}

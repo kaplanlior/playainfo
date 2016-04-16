@@ -19,6 +19,13 @@ FlowRouter.route('/events/:uuid/', {
   },
 });
 
+FlowRouter.route('/events/:uuid/:id', {
+  name: 'editEventPageRoute',
+  action: function(params) {
+    BlazeLayout.render('mainLayout', {content: 'addEventPage'});
+  },
+});
+
 FlowRouter.route('/add-event/:uuid', {
   name: 'addEventPageRoute',
   action: function(params) {
