@@ -8,6 +8,8 @@ ProviderTypesCollection = [
 {value: 'Production', label: 'Production'},
 ];
 
+defaultItemOrder = {sort: {start: -1}};
+
 function getProviderUuidByUrl() {
   return FlowRouter.getParam('uuid');
 }
@@ -44,7 +46,15 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.viewEventsPage.onCreated(function() {
+    this.state = new ReactiveDict();
+  });
+
   Template.viewEventsPage.events({
+    'input .search': function(event, instance) {
+      instance.state.set('filter', event.target.value);
+    },
+
     'click .eventDeleteButton': function() {
       id = this._id;
       new Confirmation({
@@ -105,12 +115,23 @@ if (Meteor.isClient) {
     },
 
     events: function() {
-      // uuid = FlowRouter.getParam('uuid');
-      // TODO remove
-      // if (uuid === '0') {
-      //   return EventsCollection.find({}, {sort: {start: -1}});
-      // }
-      return EventsCollection.find({'uuid': this.uuid}, {sort: {start: -1}});
+      instance = Template.instance();
+      filter = instance.state.get('filter');
+      querry = {
+        $and: [
+          {'uuid': this.uuid},
+        ],
+      };
+      if (filter) {
+        regex = new RegExp('^.*'+filter+'.*', 'i');
+        querry['$and'].push({
+          $or: [
+            {title: {$regex : regex}},
+            {title_hebrew: {$regex : regex}},
+          ],
+        });
+      }
+      return EventsCollection.find(querry, defaultItemOrder);
     },
   });
 
@@ -196,7 +217,7 @@ if (Meteor.isClient) {
           ],
         };
       }
-      return ProvidersCollection.find(querry, {sort: {start: -1}});
+      return ProvidersCollection.find(querry, defaultItemOrder);
     },
   });
 
