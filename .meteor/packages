@@ -32,10 +32,10 @@ accounts-password
 accounts-ui
 jaywon:meteor-node-uuid
 themeteorchef:bert
-matdutour:popup-confirm
 reactive-dict
 meteorhacks:npm
 
 
 npm-container
 twbs:bootstrap
+theduke:bootstrap-modal-prompt

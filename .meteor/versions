@@ -52,7 +52,6 @@ less@2.5.7
 livedata@1.0.17
 localstorage@1.0.8
 logging@1.0.11
-matdutour:popup-confirm@0.1.26
 meteor@1.1.13
 meteor-base@1.0.3
 meteorhacks:async@1.0.0
@@ -91,6 +90,7 @@ standard-minifier-css@1.0.5
 standard-minifier-js@1.0.5
 templating@1.1.8
 templating-tools@1.0.3
+theduke:bootstrap-modal-prompt@0.0.2
 themeteorchef:bert@2.1.0
 themeteorchef:jquery-validation@1.14.0
 tkornblit:icheck@0.0.2
