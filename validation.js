@@ -10,9 +10,10 @@ if (Meteor.isClient) {
     return hebrewChars.test(value);
   }, 'Please enter a valid hebrew text.');
 
-  $.validator.addMethod('endDate', function(value, element) {
-    startDate = $('.start_date').val();
-    return Date.parse(startDate) <= Date.parse(value) || value === '';
+  $.validator.addMethod('validDate', function(value, element) {
+    // startDate = $('.start_date').val();
+    // return Date.parse(startDate) <= Date.parse(value) || value === '';
+    return true;
   }, 'End date must be after start date');
 
   Template.addEventPage.onRendered(function() {
@@ -21,28 +22,32 @@ if (Meteor.isClient) {
       rules: {
         english_title: {
           minlength: 3,
+          maxlength: 140,
           required: true,
         },
         hebrew_title: {
           minlength: 3,
+          maxlength: 140,
           required: true,
           hebrewText: true,
         },
         hebrew_description: {
           minlength: 10,
+          maxlength: 270,
           required: false,
           hebrewText: true,
         },
         english_description: {
           minlength: 10,
+          maxlength: 250,
           required: true,
         },
         start_date: {
-          required: true,
+          // required: true,
         },
         end_date: {
-          required: true,
-          endDate: true,
+          // required: true,
+          validDate: true,
         },
       },
     });

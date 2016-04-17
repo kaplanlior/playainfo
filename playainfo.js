@@ -22,8 +22,18 @@ if (Meteor.isClient) {
   Meteor.startup(function() {
   });
 
-  Template.registerHelper('formatTime', function(rawTime) {
-    return moment(rawTime).format('DD/MM/YY - HH:MM');
+  Template.registerHelper('formatTime', function(date, time) {
+    return moment(date + ' ' + time).format('DD/MM/YY - HH:MM');
+  });
+
+  Template.event.helpers({
+    displayRecurring: function() {
+      return !this.recurring;
+    },
+
+    displayAllDay: function() {
+      return !this.all_day;
+    },
   });
 
   Template.viewEventsPage.events({
@@ -96,7 +106,15 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.viewProvidersPage.onCreated(function() {
+    this.state = new ReactiveDict();
+  });
+
   Template.viewProvidersPage.events({
+    'input .search': function(event, instance) {
+      instance.state.set('filter', event.target.value);
+    },
+
     'click .providersDeleteButton': function() {
       uuid = this.uuid;
       new Confirmation({
@@ -158,7 +176,19 @@ if (Meteor.isClient) {
 
   Template.viewProvidersPage.helpers({
     providers: function() {
-      return ProvidersCollection.find({}, {sort: {start: -1}});
+      instance = Template.instance();
+      filter = instance.state.get('filter');
+      querry = {};
+      if (filter) {
+        regex = new RegExp('^.*'+filter+'.*', 'i');
+        querry = {
+          $or: [
+          {name: {$regex : regex}},
+          {nameHebrew: {$regex : regex}},
+          ],
+        };
+      }
+      return ProvidersCollection.find(querry, {sort: {start: -1}});
     },
   });
 
@@ -221,7 +251,23 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.addEventPage.onCreated(function() {
+    this.state = new ReactiveDict();
+  });
+
   Template.addEventPage.helpers({
+    dateDisabled: function() {
+      instance = Template.instance();
+      recurring = instance.state.get('recurring');
+      return (recurring) ? 'disabled' : '';
+    },
+
+    timeDisabled: function() {
+      instance = Template.instance();
+      allDay = instance.state.get('allDay');
+      return (allDay) ? 'disabled' : '';
+    },
+
     provider: function() {
       return getProvider();
     },
@@ -234,6 +280,14 @@ if (Meteor.isClient) {
   });
 
   Template.addEventPage.events({
+    'change #recurring': function(event, instance) {
+      instance.state.set('recurring', event.target.checked);
+    },
+
+    'change #allDay': function(event, instance) {
+      instance.state.set('allDay', event.target.checked);
+    },
+
     'submit .addEvent': function(formEvent) {
       formEvent.preventDefault();
       id = FlowRouter.getParam('id');
@@ -244,8 +298,12 @@ if (Meteor.isClient) {
           title_hebrew: formEvent.target.hebrew_title.value,
           desc: formEvent.target.english_desc.value,
           desc_hebrew: formEvent.target.hebrew_desc.value,
-          start: formEvent.target.start_date.value,
-          end: formEvent.target.end_date.value,
+          start_time: formEvent.target.start_time.value,
+          start_date: formEvent.target.start_date.value,
+          end_time: formEvent.target.end_time.value,
+          end_date: formEvent.target.end_date.value,
+          recurring: formEvent.target.recurring.checked,
+          allDay: formEvent.target.allDay.checked,
           uuid: FlowRouter.getParam('uuid'),
           id: id,
         });
@@ -255,8 +313,12 @@ if (Meteor.isClient) {
           title_hebrew: formEvent.target.hebrew_title.value,
           desc: formEvent.target.english_desc.value,
           desc_hebrew: formEvent.target.hebrew_desc.value,
-          start: formEvent.target.start_date.value,
-          end: formEvent.target.end_date.value,
+          start_time: formEvent.target.start_time.value,
+          start_date: formEvent.target.start_date.value,
+          end_time: formEvent.target.end_time.value,
+          end_date: formEvent.target.end_date.value,
+          recurring: formEvent.target.recurring.checked,
+          allDay: formEvent.target.allDay.checked,
           uuid: FlowRouter.getParam('uuid'),
         });
       }
@@ -291,93 +353,3 @@ if (Meteor.isServer) {
 
 }
 
-Meteor.methods({
-  addEvent: function(event) {
-    EventsCollection.insert({
-      title: event.title,
-      title_hebrew: event.title_hebrew,
-      desc: event.desc,
-      desc_hebrew: event.desc_hebrew,
-      start: event.start,
-      end: event.end,
-      uuid: event.uuid,
-      //TODO switch to moment.js?
-      //check compatability with mongo ordering
-      modifiedAt: new Date(),
-      createdAt: new Date(),
-    });
-  },
-
-  updateEvent: function(event) {
-    EventsCollection.update(event.id, {
-      $set: {
-        title: event.title,
-        title_hebrew: event.title_hebrew,
-        desc: event.desc,
-        desc_hebrew: event.desc_hebrew,
-        start: event.start,
-        end: event.end,
-        uuid: event.uuid,
-        modifiedAt: new Date(),
-      }});
-  },
-
-  deleteEvent: function(eventId) {
-    EventsCollection.remove(eventId);
-  },
-
-  deleteAllProviderEvents: function(providerUuid) {
-    EventsCollection.remove({'uuid': providerUuid});
-  },
-
-  deleteProvider: function(providerUuid) {
-    EventsCollection.remove({'uuid': providerUuid});
-    ProvidersCollection.remove({'uuid': providerUuid});
-  },
-
-  deleteAllProviders: function() {
-    EventsCollection.remove({});
-    ProvidersCollection.remove({});
-  },
-
-  addProvider: function(provider) {
-    ProvidersCollection.insert({
-      name: provider.englishName,
-      nameHebrew: provider.hebrewName,
-      type: provider.type,
-      uuid: uuid.v4(),
-      modifiedAt: new Date(),
-      createdAt: new Date(),
-    });
-  },
-
-  updateProvider: function(provider) {
-    ProvidersCollection.update(provider.id, {
-      $set: {
-        name: provider.englishName,
-        nameHebrew: provider.hebrewName,
-        type: provider.type,
-        modifiedAt: new Date(), // current time },
-      },
-    });
-  },
-
-  exportEvents: function() {
-    col = EventsCollection.find().map(function(u) {return u;});
-    csv = Papa.unparse(col);
-    return csv;
-  },
-
-  exportProviders: function() {
-    col = ProvidersCollection.find().map(
-      function(u) {
-        return {
-          'English name': u.name,
-          'hebrew Name': u.nameHebrew,
-          'Access Link': 'http://playainfo.midburn.org/events/' + u.uuid,
-        };
-      });
-    csv = Papa.unparse(col);
-    return csv;
-  },
-});

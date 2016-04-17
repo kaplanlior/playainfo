@@ -33,3 +33,4 @@ accounts-ui
 jaywon:meteor-node-uuid
 themeteorchef:bert
 matdutour:popup-confirm
+reactive-dict

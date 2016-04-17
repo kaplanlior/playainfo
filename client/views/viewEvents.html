@@ -2,10 +2,10 @@
 	<tr>
 		<td>{{title}}</td>
 		<td>{{title_hebrew}}</td>
-		<td>{{formatTime start}}</td>
-		<td>{{formatTime end}}</td>
-		<td id="tdcf"></td>
-		<td id="tdcf"></td>
+		<td>{{formatTime start_date start_time}}</td>
+		<td>{{formatTime end_date end_time}}</td>
+		<td id="tdcf"><span class="icon-mark" id="marked" hidden={{displayRecurring}}></span></td>
+		<td id="tdcf"><span class="icon-mark" id="marked" hidden={{displayAllDay}}></span></td>
 		<td>
 			<span class="icon-pencil eventEditButton" id="edit"></span>
 			<span class="icon-trash eventDeleteButton" id="delete"></span>
