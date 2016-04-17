@@ -22,6 +22,14 @@ if (Meteor.isClient) {
   Meteor.startup(function() {
   });
 
+  Template.registerHelper('authInProcess', function() {
+    return Meteor.loggingIn();
+  });
+
+  Template.registerHelper('canShow', function() {
+    return !!Meteor.user();
+  });
+
   Template.registerHelper('formatTime', function(date, time) {
     return moment(date + ' ' + time).format('DD/MM/YY - HH:MM');
   });
