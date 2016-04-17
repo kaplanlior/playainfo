@@ -1,5 +1,15 @@
+
+var eventLogger = console;
+
+
+if (Meteor.isServer) {
+   eventLogger = LogManager.createLogger({logFile: 'events.log'});  
+}
+
 Meteor.methods({
   addEvent: function(event) {
+
+    eventLogger.info("Creating an event:", event);
     EventsCollection.insert({
       title: event.title,
       title_hebrew: event.title_hebrew,
@@ -20,6 +30,7 @@ Meteor.methods({
   },
 
   updateEvent: function(event) {
+    eventLogger.info("Updating an event:", event);
     EventsCollection.update(event.id, {
       $set: {
         title: event.title,
@@ -38,24 +49,29 @@ Meteor.methods({
   },
 
   deleteEvent: function(eventId) {
+    eventLogger.info("Deleting an event with id:", eventId);
     EventsCollection.remove(eventId);
   },
 
   deleteAllProviderEvents: function(providerUuid) {
+    eventLogger.info("Deleting all events from provider with uuid:", providerUuid);
     EventsCollection.remove({'uuid': providerUuid});
   },
 
   deleteProvider: function(providerUuid) {
+    eventLogger.info("Deleting provider with uuid:", providerUuid);
     EventsCollection.remove({'uuid': providerUuid});
     ProvidersCollection.remove({'uuid': providerUuid});
   },
 
   deleteAllProviders: function() {
+    eventLogger.info("Deleting all providers");
     EventsCollection.remove({});
     ProvidersCollection.remove({});
   },
 
   addProvider: function(provider) {
+    eventLogger.info("Creating a provider:", provider);
     ProvidersCollection.insert({
       name: provider.englishName,
       nameHebrew: provider.hebrewName,
@@ -67,6 +83,7 @@ Meteor.methods({
   },
 
   updateProvider: function(provider) {
+    eventLogger.info("Updating provider:", provider);
     ProvidersCollection.update(provider.id, {
       $set: {
         name: provider.englishName,
