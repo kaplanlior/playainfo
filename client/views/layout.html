@@ -3,7 +3,7 @@
 		<h1>PlayaInfo</h1>
 	</header> -->
 	<body>
-		<div class="background">
+		<div class="container">
 			{{>Template.dynamic template=content}}
 		</div>
 	</body>
@@ -12,12 +12,10 @@
 
 
 <template name="mainMenu">
-	<div class="main-menu">
-		<div class="menu-button"><a href="">Main</a></div>
-		<div class="menu-button"><a href="/provider">Add</a></div>
-<!-- TODO: Known Issue: clicking works only on text, not on buttons -->
-		<div class="menu-button"><a href="/provider">Add Bulk</a></div>
-		<div class="menu-button"><a href="/providers">Groups</a></div>
+	<ul class="nav nav-tabs">
+		<li role="presentation" class="menuListContentProviders {{#if isProviders}}active{{/if}}"><a href="#">Content Providers</a></li>
+		<li role="presentation" class="disabled {{#if isAddProviderBulk}}active{{/if}}"><a href="/">Add Bulk</a></li>
+		<li role="presentation" class="disabled {{#if isGroups}}active{{/if}}"><a href="/">Groups</a></li>
 		<!-- {{> loginButtons align="right"}} -->
-	</div>
+	</ul>
 </template>

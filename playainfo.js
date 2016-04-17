@@ -19,11 +19,12 @@ function getProvider() {
 }
 
 if (Meteor.isClient) {
+
   Meteor.startup(function() {
   });
 
   Template.registerHelper('formatTime', function(date, time) {
-    return moment(date + ' ' + time).format('DD/MM/YY - HH:MM');
+    return moment(new Date(date + ' ' + time)).format('DD/MM/YY - HH:MM');
   });
 
   Template.event.helpers({
@@ -36,7 +37,16 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.mainMenu.events({
+    'click .menuListContentProviders': function() {
+      FlowRouter.go('viewProvidersPageRoute');
+    }
+  });
+
   Template.viewEventsPage.events({
+    'input .search': function(event, instance) {
+      instance.state.set('filter', event.target.value);
+    },
     'click .eventDeleteButton': function() {
       id = this._id;
       new Confirmation({
@@ -91,6 +101,9 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.viewEventsPage.onCreated(function() {
+    this.state = new ReactiveDict();
+  });
   Template.viewEventsPage.helpers({
     provider: function() {
       return getProvider();
@@ -102,7 +115,20 @@ if (Meteor.isClient) {
       // if (uuid === '0') {
       //   return EventsCollection.find({}, {sort: {start: -1}});
       // }
-      return EventsCollection.find({'uuid': this.uuid}, {sort: {start: -1}});
+      instance = Template.instance();
+      filter = instance.state.get('filter');
+      query = {};
+      if (filter) {
+        regex = new RegExp('^.*'+filter+'.*', 'i');
+        query = {
+          'uuid': this.uuid,
+          $or: [
+          {title: {$regex : regex}},
+          {title_hebrew: {$regex : regex}},
+          ],
+        };
+      }
+      return EventsCollection.find(query, {sort: {start: -1}});
     },
   });
 
@@ -113,6 +139,16 @@ if (Meteor.isClient) {
   Template.viewProvidersPage.events({
     'input .search': function(event, instance) {
       instance.state.set('filter', event.target.value);
+    },
+
+    'click .providerViewEventsButton': function() {
+      FlowRouter.go('eventsPageRoute', {
+        uuid: this.uuid,
+      });
+    },
+
+    'click .addContentProvider': function() {
+      FlowRouter.go('addProvidersPageRoute');
     },
 
     'click .providersDeleteButton': function() {
@@ -178,17 +214,17 @@ if (Meteor.isClient) {
     providers: function() {
       instance = Template.instance();
       filter = instance.state.get('filter');
-      querry = {};
+      query = {};
       if (filter) {
         regex = new RegExp('^.*'+filter+'.*', 'i');
-        querry = {
+        query = {
           $or: [
           {name: {$regex : regex}},
           {nameHebrew: {$regex : regex}},
           ],
         };
       }
-      return ProvidersCollection.find(querry, {sort: {start: -1}});
+      return ProvidersCollection.find(query, {sort: {start: -1}});
     },
   });
 
@@ -288,8 +324,14 @@ if (Meteor.isClient) {
       instance.state.set('allDay', event.target.checked);
     },
 
-    'submit .addEvent': function(formEvent) {
+    'click #submitBtn': function(formEvent) {
+      var valid = $("#addEvent").valid();
+      console.log("Form valid: " + valid);
+      return valid;
+    },
+    'submit form': function(formEvent) {
       formEvent.preventDefault();
+
       id = FlowRouter.getParam('id');
 
       if (id) {

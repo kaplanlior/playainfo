@@ -1,33 +1,73 @@
 <template name="addEventPage">
-	{{#with provider}}
-	<title>Add Events</title>
-	<div class="header">Add Events - {{name}} - {{type}}</div>
+{{#with provider}}
+	<a href="/events/{{uuid}}"><i class="fa fa-arrow-left"></i> Back to Existing events page</a>
+	<h1>Create a New Event</h1>
+	<h3>Provider: {{name}} - {{type}}</h3>
 	<div class="container">
-		<div class="forms">
-			<div class="backto">
-				<a href="/events/{{uuid}}">Back to Existing events page</a>
-			</div><br>
 			{{#with event}}
-			<form class="addEvent">
-				<b>Create New Event</b> <br>
-				<input name="english_title" type="text" value="{{event.title}}"> 
-				<label for="english_title">Title - English</label> <br>
-				<input name="hebrew_title" type="text" value="{{event.title_hebrew}}">
-				<label for="hebrew_title">Title - Hebrew</label> <br>
-				<input type="time" name="start_time" {{timeDisabled}} value="{{event.start_time}}">
-				<input type="date" name="start_date" {{dateDisabled}} value="{{event.start_date}}">
-				<label for="start_date0">Start</label> <br>
-				<input type="time" name="end_time" {{timeDisabled}} value="{{event.end_time}}">
-				<input type="date" name="end_date" {{dateDisabled}} value="{{event.end_date}}">
-				<label for="end_date0">End</label> <br>
-				<input name="recurring" type="checkbox" id="recurring" checked="{{event.recurring}}">
-				<label for="recurring">Recurring</label><br>
-				<input name="allDay" type="checkbox" id="allDay" checked="{{event.all_day}}">
-				<label for="allDay">All Day</label><br>
-				<textarea rows="5" name="english_desc" value="{{event.desc}}"></textarea>
-				<label for="english_description">Description - English</label> <br><br>
-				<textarea rows="5" name="hebrew_desc" value="{{event.desc_hebrew}}"></textarea>
-				<label for="hebrew_description">Description - Hebrew</label><br>
+			<form id="addEvent" class="form-horizontal">
+				<div class="form-group">
+					<label for="english_title" class="col-sm-2 control-label">Title - English</label>
+					<div class="col-sm-6">
+						<input name="english_title" type="text" class="form-control" value="{{event.title}}"> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="hebrew_title" class="col-sm-2 control-label">Title - Hebrew</label>
+					<div class="col-sm-6">
+						<input name="hebrew_title" type="text" class="form-control" value="{{event.title_hebrew}}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="start_date0" class="col-sm-2 control-label">Start</label>
+					<div class="col-sm-4">
+						<input type="date" name="start_date" {{dateDisabled}} class="form-control" value="{{event.start_date}}">
+					</div>
+					<div class="col-sm-2">
+						<input type="time" name="start_time" {{timeDisabled}} class="form-control" value="{{event.start_time}}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="end_date0" class="col-sm-2 control-label">End</label>
+					<div class="col-sm-4">
+						<input type="date" name="end_date" {{dateDisabled}} class="form-control" value="{{event.end_date}}">
+					</div>
+					<div class="col-sm-2">
+						<input type="time" name="end_time" {{timeDisabled}} class="form-control" value="{{event.end_time}}">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-2">
+						<div class="checkbox">
+							<label for="recurring" class="control-label">
+								<input name="recurring" type="checkbox" id="recurring" checked="{{event.recurring}}"> Recurring
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-2">
+						<div class="checkbox">
+							<label for="allDay" class="control-label">
+								<input name="allDay" type="checkbox" id="allDay" checked="{{event.all_day}}"> All Days
+							</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="english_desc" class="col-sm-2 control-label">Description - English</label>
+					<div class="col-sm-6">
+						<textarea rows="5" name="english_desc" class="form-control" value="{{event.desc}}"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="hebrew_desc" class="col-sm-2 control-label">Description - Hebrew</label>
+					<div class="col-sm-6">
+						<textarea rows="5" name="hebrew_desc" class="form-control" value="{{event.desc_hebrew}}"></textarea>
+					</div>
+				</div>
 <!-- 			TODO other fields
 				<input name="location" type="text" value="{{defaultLocation event.location}}"> //add default helper here
 				<input name="audience" type=option> //drop down
@@ -44,11 +84,9 @@
 				<input name="Main event" type="checkbox">
 				<input name="Art" type="checkbox">
 			-->
-			<button type="submit" class="submitevnt">Save</button>
-			<br><br><br>
+			<button id="submitBtn" type="submit" value="Submit" class="btn btn-primary submitevnt">Save</button>
 		</form>
 		{{/with}}
 	</div>
-</div>
 {{/with}}
 </template>

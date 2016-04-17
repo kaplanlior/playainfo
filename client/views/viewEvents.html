@@ -7,54 +7,57 @@
 		<td id="tdcf"><span class="icon-mark" id="marked" hidden={{displayRecurring}}></span></td>
 		<td id="tdcf"><span class="icon-mark" id="marked" hidden={{displayAllDay}}></span></td>
 		<td>
-			<span class="icon-pencil eventEditButton" id="edit"></span>
-			<span class="icon-trash eventDeleteButton" id="delete"></span>
-		</td>
+	      <div class="pull-right">
+	        <button class="btn btn-sm btn-primary eventEditButton" id="edit"><i class="fa fa-pencil"></i>&nbsp; Edit</button>
+	        <button class="btn btn-sm btn-danger eventDeleteButton" id="delete"><i class="fa fa-trash"></i>&nbsp; Delete</button>
+	     </div>
+	   </td>
 	</tr>
 </template>
 
 <template name="viewEventsPage">
 	{{#with provider}}
-	<div class="header">Events Management - {{name}} - {{type}}</div>
-	<div class="container">
-		<div class="hello">
-			<b>Hello, Welcome to Playainfo.</b> <br>
-			Here you can create and edit events belonging to {{name}}. <br><br>
-			<a href="/add-event/{{uuid}}">
-				<button type="button" class="crt-evnt">Create New Event</button>
-			</a>
+	<h1>Events Management - {{name}} - {{type}}</h1>
+		<div class="container">
+			<h4>Hello, Welcome to Playainfo.</h4>
+			<h5>Here you can create and edit events belonging to {{name}}.</h5>
 		</div>
+	    <div class="form-inline action-bar">
+	      <div class="form-group">
+	        <input type="search" class="search form-control" placeholder="filter events">
+	      </div>
 
-		<br><br><br>
-		<input type="search" class="search-evnt-name" placeholder="search Event name">
-		<input type="submit" value="search">
-		<button type="button" class="eventDeleteAllButton clean-events">
-			<span class="icon-delete" id="clean-events"></span> erase all
-		</button> 
-
-		<div class="evnt-table">
-			<table>
-				<tr>
-					<th id="evnt-he-name">English</th>
-					<th id="evnt-en-name">Hebrew</th>		
-					<th>Start</th>
-					<th>End</th>
-					<th>Recurring</th>	
-					<th>All Day </th>		
-					<th colspan="3">Actions</th>
-				</tr>
-				{{#if Template.subscriptionsReady}}
-					{{#each events}}
-						{{> event}}
-					{{else}}
-						No events, try adding some!
-					{{/each}}
+	      <div class="form-group pull-right">
+	      	<a class="btn btn-primary" href="/add-event/{{uuid}}"><i class="fa fa-calendar"></i> Create New Event</a>
+	        <button type="button" id="deleteAll" class="form-control btn btn-danger eventDeleteAllButton clean-events {{#unless events.count}}disabled{{/unless}}">
+	          <i class="fa fa-remove"></i> Delete all
+	        </button>
+	      </div>
+	    </div>
+     	<table class="table table-condensed table-striped table-hover">
+     	<thead>
+			<tr>
+				<th id="evnt-he-name">English</th>
+				<th id="evnt-en-name">Hebrew</th>		
+				<th>Start</th>
+				<th>End</th>
+				<th>Recurring</th>	
+				<th>All Day </th>		
+				<th colspan="3">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#if Template.subscriptionsReady}}
+				{{#each events}}
+					{{> event}}
 				{{else}}
-					Loading...
-				{{/if}}
-			</table>
-		</div>
-	</div>
+					No events, try adding some!
+				{{/each}}
+			{{else}}
+				Loading...
+			{{/if}}
+		</tbody>
+		</table>
 
 
 
