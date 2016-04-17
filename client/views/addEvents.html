@@ -24,9 +24,9 @@
 				<label for="recurring">Recurring</label><br>
 				<input name="allDay" type="checkbox" id="allDay" checked="{{event.all_day}}">
 				<label for="allDay">All Day</label><br>
-				<textarea rows="5" name="english_desc" value="{{event.desc}}"></textarea>
+				<textarea rows="5" name="english_desc" value="{{event.desc}}" placeholder="270 characters max"></textarea>
 				<label for="english_description">Description - English</label> <br><br>
-				<textarea rows="5" name="hebrew_desc" value="{{event.desc_hebrew}}"></textarea>
+				<textarea rows="5" name="hebrew_desc" value="{{event.desc_hebrew}}" placeholder="250 characters max"></textarea>
 				<label for="hebrew_description">Description - Hebrew</label><br>
 <!-- 			TODO other fields
 				<input name="location" type="text" value="{{defaultLocation event.location}}"> //add default helper here
