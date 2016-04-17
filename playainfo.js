@@ -1,12 +1,19 @@
 EventsCollection = new Mongo.Collection('events');
 ProvidersCollection = new Mongo.Collection('providers');
 // TODO move to collection once we need to work with new types
-ProviderTypesCollection = [
-{value: 'Camp', label: 'Camp'},
-{value: 'Installation', label: 'Installation'},
-{value: 'Salon', label: 'Salon'},
-{value: 'Production', label: 'Production'},
-];
+ProviderTypesCollection = [{
+  value: 'Camp',
+  label: 'Camp'
+}, {
+  value: 'Installation',
+  label: 'Installation'
+}, {
+  value: 'Salon',
+  label: 'Salon'
+}, {
+  value: 'Production',
+  label: 'Production'
+}, ];
 
 function getProviderUuidByUrl() {
   return FlowRouter.getParam('uuid');
@@ -14,16 +21,18 @@ function getProviderUuidByUrl() {
 
 function getProvider() {
   uuid = getProviderUuidByUrl();
-  result = ProvidersCollection.findOne({'uuid': uuid});
+  result = ProvidersCollection.findOne({
+    'uuid': uuid
+  });
   return result;
 }
 
 if (Meteor.isClient) {
-  Meteor.startup(function() {
-  });
+
+  Meteor.startup(function() {});
 
   Template.registerHelper('formatTime', function(date, time) {
-    return moment(date + ' ' + time).format('DD/MM/YY - HH:MM');
+    return moment(new Date(date + ' ' + time)).format('DD/MM/YY - HH:MM');
   });
 
   Template.event.helpers({
@@ -36,18 +45,24 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.mainMenu.events({
+    'click .menuListContentProviders': function() {
+      FlowRouter.go('viewProvidersPageRoute');
+    }
+  });
+
   Template.viewEventsPage.events({
+    'input .search': function(event, instance) {
+      instance.state.set('filter', event.target.value);
+    },
     'click .eventDeleteButton': function() {
       id = this._id;
-      new Confirmation({
-        message: 'Delete event?',
-        title: 'Confirmation',
-        cancelText: 'Cancel',
-        okText: 'Ok',
-        success: false,
-        focus: 'cancel',
-      }, function(ok) {
-        if (ok) {
+
+      BootstrapModalPrompt.prompt({
+        title: "Delete Event",
+        content: "Are you sure want to delete the event '" + this.title + "'?"
+      }, function(result) {
+        if (result) {
           Meteor.call('deleteEvent', id);
           Bert.alert({
             title: 'Action successful',
@@ -62,15 +77,11 @@ if (Meteor.isClient) {
 
     'click .eventDeleteAllButton': function() {
       uuid = this.uuid;
-      new Confirmation({
-        message: 'Delete all events?',
-        title: 'Confirmation',
-        cancelText: 'Cancel',
-        okText: 'Ok',
-        success: false,
-        focus: 'cancel',
-      }, function(ok) {
-        if (ok) {
+      BootstrapModalPrompt.prompt({
+        title: "Delete All Events",
+        content: "Are you sure want to delete all events?"
+      }, function(result) {
+        if (result) {
           Meteor.call('deleteAllProviderEvents', uuid);
           Bert.alert({
             title: 'Action successful',
@@ -91,6 +102,9 @@ if (Meteor.isClient) {
     },
   });
 
+  Template.viewEventsPage.onCreated(function() {
+    this.state = new ReactiveDict();
+  });
   Template.viewEventsPage.helpers({
     provider: function() {
       return getProvider();
@@ -102,7 +116,29 @@ if (Meteor.isClient) {
       // if (uuid === '0') {
       //   return EventsCollection.find({}, {sort: {start: -1}});
       // }
-      return EventsCollection.find({'uuid': this.uuid}, {sort: {start: -1}});
+      instance = Template.instance();
+      filter = instance.state.get('filter');
+      query = {};
+      if (filter) {
+        regex = new RegExp('^.*' + filter + '.*', 'i');
+        query = {
+          'uuid': this.uuid,
+          $or: [{
+            title: {
+              $regex: regex
+            }
+          }, {
+            title_hebrew: {
+              $regex: regex
+            }
+          }, ],
+        };
+      }
+      return EventsCollection.find(query, {
+        sort: {
+          start: -1
+        }
+      });
     },
   });
 
@@ -115,17 +151,24 @@ if (Meteor.isClient) {
       instance.state.set('filter', event.target.value);
     },
 
+    'click .providerViewEventsButton': function() {
+      FlowRouter.go('eventsPageRoute', {
+        uuid: this.uuid,
+      });
+    },
+
+    'click .addContentProvider': function() {
+      FlowRouter.go('addProvidersPageRoute');
+    },
+
     'click .providersDeleteButton': function() {
       uuid = this.uuid;
-      new Confirmation({
-        message: 'Delete provider?',
-        title: 'Confirmation',
-        cancelText: 'Cancel',
-        okText: 'Ok',
-        success: false,
-        focus: 'cancel',
-      }, function(ok) {
-        if (ok) {
+
+      BootstrapModalPrompt.prompt({
+        title: "Delete Provider",
+        content: "Are you sure want to delete the provider '" + this.name + "'?"
+      }, function(result) {
+        if (result) {
           Meteor.call('deleteProvider', uuid);
           Bert.alert({
             title: 'Action successful',
@@ -139,15 +182,12 @@ if (Meteor.isClient) {
     },
 
     'click .providersDeleteAllButton': function() {
-      new Confirmation({
-        message: 'Delete all providers?',
-        title: 'Confirmation',
-        cancelText: 'Cancel',
-        okText: 'Ok',
-        success: false,
-        focus: 'cancel',
-      }, function(ok) {
-        if (ok) {
+
+      BootstrapModalPrompt.prompt({
+        title: "Delete All Providers",
+        content: "Are you sure want to delete all providers?"
+      }, function(result) {
+        if (result) {
           Meteor.call('deleteAllProviders');
           Bert.alert({
             title: 'Action successful',
@@ -162,7 +202,9 @@ if (Meteor.isClient) {
 
     'click .providersExport': async function() {
       csv = await Meteor.callPromise('exportProviders');
-      blob = new Blob([csv], {type: 'text/plain;charset=utf-8'});
+      blob = new Blob([csv], {
+        type: 'text/plain;charset=utf-8'
+      });
       // TODO add new Date() to filename
       saveAs(blob, 'providers.csv');
     },
@@ -178,17 +220,26 @@ if (Meteor.isClient) {
     providers: function() {
       instance = Template.instance();
       filter = instance.state.get('filter');
-      querry = {};
+      query = {};
       if (filter) {
-        regex = new RegExp('^.*'+filter+'.*', 'i');
-        querry = {
-          $or: [
-          {name: {$regex : regex}},
-          {nameHebrew: {$regex : regex}},
-          ],
+        regex = new RegExp('^.*' + filter + '.*', 'i');
+        query = {
+          $or: [{
+            name: {
+              $regex: regex
+            }
+          }, {
+            nameHebrew: {
+              $regex: regex
+            }
+          }, ],
         };
       }
-      return ProvidersCollection.find(querry, {sort: {start: -1}});
+      return ProvidersCollection.find(query, {
+        sort: {
+          start: -1
+        }
+      });
     },
   });
 
@@ -213,7 +264,7 @@ if (Meteor.isClient) {
       action = providerId ? 'saved' : 'added';
       Bert.alert({
         title: 'Action successful',
-        message: 'Successfully '+action+' provider',
+        message: 'Successfully ' + action + ' provider',
         type: 'info',
         style: 'growl-top-right',
         icon: 'fa-thumbs-up',
@@ -288,8 +339,14 @@ if (Meteor.isClient) {
       instance.state.set('allDay', event.target.checked);
     },
 
-    'submit .addEvent': function(formEvent) {
+    'click #submitBtn': function(formEvent) {
+      var valid = $("#addEvent").valid();
+      console.log("Form valid: " + valid);
+      return valid;
+    },
+    'submit form': function(formEvent) {
       formEvent.preventDefault();
+
       id = FlowRouter.getParam('id');
 
       if (id) {
@@ -352,4 +409,3 @@ if (Meteor.isServer) {
   // });
 
 }
-

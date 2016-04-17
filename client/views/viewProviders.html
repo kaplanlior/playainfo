@@ -1,36 +1,50 @@
 <template name="provider">
   <tr>
-    <td><a href="/events/{{uuid}}">{{name}}</a></td>
-    <td><a href="/events/{{uuid}}">{{nameHebrew}}</a></td>
+    <td>{{name}}</td>
+    <td>{{nameHebrew}}</td>
     <td>{{type}}</td>
     <td>
-      <td>
-       <span class="icon-pencil providerEditButton" id="edit"></span>
-       <span class="icon-trash providersDeleteButton" id="delete"></span>
-     </td>
+      <div class="pull-right">
+        <button class="btn btn-sm btn-primary providerEditButton" id="edit"><i class="fa fa-pencil"></i>&nbsp; Edit</button>
+        <button class="btn btn-sm btn-success providerViewEventsButton" id="events"><i class="fa fa-calendar"></i>&nbsp; View Events</button>
+        <button class="btn btn-sm btn-danger providersDeleteButton" id="delete"><i class="fa fa-trash"></i>&nbsp; Delete</button>
+     </div>
    </td>
  </tr>
 </template>
 
 <template name="viewProvidersPage">
-  <div class="header">Content Providers Management</div>
-  {{> mainMenu}}
+  <h1>Content Providers Management</h1>
+  {{> mainMenu isProviders="true"}}
   <div class="container">
-    <input type="search" class="search" placeholder="filter providers">
-    <button type="button" class="providersExport">
-      export
-    </button>
-    <button type="button" class="clean-pro providersDeleteAllButton">
-      <span class="icon-delete" id="clean-pro"></span> erase all
-    </button>
-    <div class="cptable">
-      <table>
+    <div class="form-inline action-bar">
+      <div class="form-group">
+        <input type="search" class="search form-control" placeholder="filter providers">
+      </div>
+
+      <div class="form-group pull-right">
+        <button type="button" class="form-control btn btn-sm btn-primary addContentProvider">
+          <i class="fa fa-magic"></i> Create a new Provider
+        </button>
+        <button type="button" class="form-control btn btn-sm btn-success providersExport">
+          <i class="fa fa-floppy-o"></i> Export
+        </button>
+        <button type="button" id="deleteAll" class="form-control btn btn-danger providersDeleteAllButton {{#unless providers.count}}disabled{{/unless}}">
+          <i class="fa fa-remove"></i> Delete all
+        </button>
+      </div>
+    </div>
+    <div>
+      <table class="table table-condensed table-striped table-hover">
+        <thead>
         <tr>
           <th id="en-name">English Name</th>    
           <th id="he-name">Hebrew Name</th>
           <th>Content Group</th>
-          <th colspan="3">Actions</th>
+          <th><div class="pull-right">Actions</div></th>
         </tr>
+        </thead>
+        <tbody>
         {{#if Template.subscriptionsReady}}
           {{#each providers}}
             {{> provider}}
@@ -40,6 +54,7 @@
         {{else}}
           Loading...
         {{/if}}
+        </tbody>
       </table> 
     </div>
   </div>
