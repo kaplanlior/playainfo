@@ -28,6 +28,24 @@
 				<label for="english_description">Description - English</label> <br><br>
 				<textarea rows="5" name="hebrew_desc" value="{{event.desc_hebrew}}" placeholder="250 characters max"></textarea>
 				<label for="hebrew_description">Description - Hebrew</label><br>
+				<input name="adults_only" type="checkbox" id="adults_only" checked="{{event.adults_only}}">
+				<label for="adults_only">Adults Only</label><br>
+				<input name="for_kids" type="checkbox" id="for_kids" checked="{{event.for_kids}}">
+				<label for="for_kids">For Kids</label><br>
+				<input name="party" type="checkbox" id="party" checked="{{event.party}}">
+				<label for="party">Party</label><br>
+				<input name="performance" type="checkbox" id="performance" checked="{{event.performance}}">
+				<label for="performance">Performance</label><br>
+				<input name="movie" type="checkbox" id="movie" checked="{{event.movie}}">
+				<label for="movie">Movie</label><br>
+				<input name="game" type="checkbox" id="game" checked="{{event.game}}">
+				<label for="game">Game</label><br>
+				<input name="workshop" type="checkbox" id="workshop" checked="{{event.workshop}}">
+				<label for="workshop">Workshop</label><br>
+				<input name="lecture" type="checkbox" id="lecture" checked="{{event.lecture}}">
+				<label for="lecture">Lecture</label><br>
+
+
 <!-- 			TODO other fields
 				<input name="location" type="text" value="{{defaultLocation event.location}}"> //add default helper here
 				<input name="audience" type=option> //drop down

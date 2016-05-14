@@ -20,6 +20,29 @@ function getProvider() {
   return result;
 }
 
+function extractEventFromForm(formEvent) {
+  return {
+    title: formEvent.target.english_title.value,
+    title_hebrew: formEvent.target.hebrew_title.value,
+    desc: formEvent.target.english_desc.value,
+    desc_hebrew: formEvent.target.hebrew_desc.value,
+    start_time: formEvent.target.start_time.value,
+    start_date: formEvent.target.start_date.value,
+    end_time: formEvent.target.end_time.value,
+    end_date: formEvent.target.end_date.value,
+    recurring: formEvent.target.recurring.checked,
+    allDay: formEvent.target.allDay.checked,
+    adults_only: formEvent.target.adults_only.checked,
+    for_kids: formEvent.target.for_kids.checked,
+    party: formEvent.target.party.checked,
+    performance: formEvent.target.performance.checked,
+    movie: formEvent.target.movie.checked,
+    game: formEvent.target.game.checked,
+    workshop: formEvent.target.workshop.checked,
+    lecture: formEvent.target.lecture.checked,
+  };
+}
+
 if (Meteor.isClient) {
   Meteor.startup(function() {
   });
@@ -119,15 +142,15 @@ if (Meteor.isClient) {
       filter = instance.state.get('filter');
       querry = {
         $and: [
-          {'uuid': this.uuid},
+        {'uuid': this.uuid},
         ],
       };
       if (filter) {
         regex = new RegExp('^.*'+filter+'.*', 'i');
         querry['$and'].push({
           $or: [
-            {title: {$regex : regex}},
-            {title_hebrew: {$regex : regex}},
+          {title: {$regex : regex}},
+          {title_hebrew: {$regex : regex}},
           ],
         });
       }
@@ -140,6 +163,14 @@ if (Meteor.isClient) {
   });
 
   Template.viewProvidersPage.events({
+    'change .file': function(event, instance) {
+      Papa.parse(event.target.files[0], {
+        complete: function(results) {
+          Meteor.call('IngestEventsFromFile', results);
+        },
+      });
+    },
+
     'input .search': function(event, instance) {
       instance.state.set('filter', event.target.value);
     },
@@ -288,12 +319,18 @@ if (Meteor.isClient) {
     dateDisabled: function() {
       instance = Template.instance();
       recurring = instance.state.get('recurring');
+      if (recurring === undefined) {
+        recurring = this.recurring;
+      }
       return (recurring) ? 'disabled' : '';
     },
 
     timeDisabled: function() {
       instance = Template.instance();
       allDay = instance.state.get('allDay');
+      if (allDay === undefined) {
+        allDay = this.all_day;
+      }
       return (allDay) ? 'disabled' : '';
     },
 
@@ -320,36 +357,14 @@ if (Meteor.isClient) {
     'submit .addEvent': function(formEvent) {
       formEvent.preventDefault();
       id = FlowRouter.getParam('id');
-
+      uuid = FlowRouter.getParam('uuid');
+      storedEvent = extractEventFromForm(formEvent);
+      storedEvent.uuid = uuid;
       if (id) {
-        Meteor.call('updateEvent', {
-          title: formEvent.target.english_title.value,
-          title_hebrew: formEvent.target.hebrew_title.value,
-          desc: formEvent.target.english_desc.value,
-          desc_hebrew: formEvent.target.hebrew_desc.value,
-          start_time: formEvent.target.start_time.value,
-          start_date: formEvent.target.start_date.value,
-          end_time: formEvent.target.end_time.value,
-          end_date: formEvent.target.end_date.value,
-          recurring: formEvent.target.recurring.checked,
-          allDay: formEvent.target.allDay.checked,
-          uuid: FlowRouter.getParam('uuid'),
-          id: id,
-        });
+        storedEvent.id = id;
+        Meteor.call('updateEvent', storedEvent);
       } else {
-        Meteor.call('addEvent', {
-          title: formEvent.target.english_title.value,
-          title_hebrew: formEvent.target.hebrew_title.value,
-          desc: formEvent.target.english_desc.value,
-          desc_hebrew: formEvent.target.hebrew_desc.value,
-          start_time: formEvent.target.start_time.value,
-          start_date: formEvent.target.start_date.value,
-          end_time: formEvent.target.end_time.value,
-          end_date: formEvent.target.end_date.value,
-          recurring: formEvent.target.recurring.checked,
-          allDay: formEvent.target.allDay.checked,
-          uuid: FlowRouter.getParam('uuid'),
-        });
+        Meteor.call('addEvent', storedEvent);
       }
 
       Bert.alert({
@@ -361,7 +376,7 @@ if (Meteor.isClient) {
       });
 
       FlowRouter.go('eventsPageRoute', {
-        uuid: FlowRouter.getParam('uuid'),
+        uuid: uuid,
       });
     },
   });

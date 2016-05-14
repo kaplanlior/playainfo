@@ -3,49 +3,48 @@ var eventLogger = console;
 
 
 if (Meteor.isServer) {
-   eventLogger = LogManager.createLogger({logFile: 'events.log'});  
+ eventLogger = LogManager.createLogger({logFile: 'events.log'});  
+}
+
+function prepareEvent(event) {
+  return {
+    title: event.title,
+    title_hebrew: event.title_hebrew,
+    desc: event.desc,
+    desc_hebrew: event.desc_hebrew,
+    start_time: event.start_time,
+    start_date: event.start_date,
+    end_time: event.end_time,
+    end_date: event.end_date,
+    recurring: event.recurring,
+    all_day: event.allDay,
+    adults_only: event.adults_only,
+    for_kids: event.for_kids,
+    party: event.party,
+    performance: event.performance,
+    movie: event.movie,
+    game: event.game,
+    workshop: event.workshop,
+    lecture: event.lecture,
+    uuid: event.uuid,
+    modifiedAt: new Date(),
+  };
 }
 
 Meteor.methods({
   addEvent: function(event) {
-
     eventLogger.info("Creating an event:", event);
-    EventsCollection.insert({
-      title: event.title,
-      title_hebrew: event.title_hebrew,
-      desc: event.desc,
-      desc_hebrew: event.desc_hebrew,
-      start_time: event.start_time,
-      start_date: event.start_date,
-      end_time: event.end_time,
-      end_date: event.end_date,
-      recurring: event.recurring,
-      all_day: event.allDay,
-      uuid: event.uuid,
-      //TODO switch to moment.js?
-      //check compatability with mongo ordering
-      modifiedAt: new Date(),
-      createdAt: new Date(),
-    });
+    storedEvent = prepareEvent(event);
+    storedEvent.createdAt = new Date();
+    EventsCollection.insert(storedEvent);
   },
 
   updateEvent: function(event) {
     eventLogger.info("Updating an event:", event);
+    storedEvent = prepareEvent(event);
     EventsCollection.update(event.id, {
-      $set: {
-        title: event.title,
-        title_hebrew: event.title_hebrew,
-        desc: event.desc,
-        desc_hebrew: event.desc_hebrew,
-        start_time: event.start_time,
-        start_date: event.start_date,
-        end_time: event.end_time,
-        end_date: event.end_date,
-        recurring: event.recurring,
-        all_day: event.allDay,
-        uuid: event.uuid,
-        modifiedAt: new Date(),
-      }});
+      $set: storedEvent,
+    });
   },
 
   deleteEvent: function(eventId) {
@@ -112,4 +111,28 @@ Meteor.methods({
     csv = Papa.unparse(col);
     return csv;
   },
+
+  // IngestEventsFromFile: function(csvFile) {
+  //   // console.log(csvFile);
+  //   // for each line in csvFile
+  //   provider = parseProvider(line);
+  //   if (!isProviderExists(provider)) {
+  //     insertProvider(provider);
+  //   }
+  //   time = parseTime(line);
+  //   date = parseDate(line);
+  //   tags = parseTags(line);
+  //   engTitle = parseEnglishTitle(line);
+  //   engDesc = parseEnglishDesc(line);
+  //   hebTitle = parseHebrewTitle(line);
+  //   hebDesc = parseHebrewDesc(line);
+
+  //   // event = new Event{
+  //   //   a = a;
+  //   //   b= b;
+  //   //   c = d;
+  //   // }
+
+  //   insertEvent(event);
+  // },
 });
