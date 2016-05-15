@@ -1,33 +1,37 @@
 <template name="addProvidersPage">
 	{{#with provider}}
-	<div class="header">Content Providers Management</div>
-	{{> mainMenu}}
-	<div class="container">
-		<form class="addProvider">
-			<div class="forms">
+	<a href="/providers"><i class="fa fa-arrow-left"></i> Back to Providers List</a>
+	<h1>{{ action }} Content Provider {{provider.name}}</h1>
+	{{> mainMenu isProviders="true"}}
+	<div class="form-container well">
+		<form class="form-horizontal addProvider">
 				{{#if Template.subscriptionsReady}}
-				<b>{{ action }} Content Provider {{provider.name}}</b> <br>
 				{{else}}
 				Loading...
 				{{/if}}
-				<input name="englishName" type="text" value="{{provider.name}}">
-				<label for="englishName">English Name</label>  <br>
-				<input name="hebrewName" type="text" value="{{provider.nameHebrew}}">
-				<label for="hebrewName">Hebrew Name</label> <br>
-				<label for="select">Type</label><br>
-				<div class="styled-select" >
-					<select name="typeSelector">
+				<div class="form-group">
+					<label for="englishName">English Name</label>
+					<input name="englishName" type="text" class="form-control" placeholder="English name" value="{{provider.name}}">
+				</div>
+				<div class="form-group">
+					<label for="hebrewName">Hebrew Name</label>
+					<input name="hebrewName" type="text" class="form-control" value="{{provider.nameHebrew}}">
+				</div>
+				<div class="form-group">
+					<label for="select">Type</label>
+					<select name="typeSelector" class="form-control">
 						{{#each option in options}}
 						<option value="{{option.value}}" selected={{isSelected option.value}}>{{option.label}}</option> 
 						{{/each}}
 					</select>
-				</div><br>
-				{{#if isEdit}}
-				<button type="submit" class="saveProvider">Save Changes</button>
-				{{else}}
-				<button type="submit" class="addProvider">Create</button>
-				{{/if}} 
-			</div>
+				</div>
+				<div class="form-group">
+					{{#if isEdit}}
+					<button type="submit" class="btn btn-primary saveProvider">Save Changes</button>
+					{{else}}
+					<button type="submit" class="btn btn-primary addProvider">Create</button>
+					{{/if}} 
+				</div>
 		</form>
 	</div>
 	{{/with}}

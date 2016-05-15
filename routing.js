@@ -63,7 +63,7 @@ FlowRouter.route('/provider/', {
   action: function(params) {
     BlazeLayout.render('adminLayout', {
       content: 'addProvidersPage',
-      action: 'Add',
+      action: 'Add'
     });
   },
 });
@@ -77,7 +77,7 @@ FlowRouter.route('/provider/:id?', {
   action: function(params) {
     BlazeLayout.render('adminLayout', {
       content: 'addProvidersPage',
-      action: 'Edit',
+      action: 'Edit'
     });
   },
 });

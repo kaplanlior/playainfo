@@ -17,7 +17,7 @@ if (Meteor.isClient) {
   }, 'End date must be after start date');
 
   Template.addEventPage.onRendered(function() {
-    $('.addEvent').validate({
+    $('#addEvent').validate({
       errorElement: 'span',
       rules: {
         english_title: {
@@ -31,13 +31,13 @@ if (Meteor.isClient) {
           required: true,
           hebrewText: true,
         },
-        hebrew_description: {
+        hebrew_desc: {
           minlength: 10,
           maxlength: 270,
           required: false,
           hebrewText: true,
         },
-        english_description: {
+        english_desc: {
           minlength: 10,
           maxlength: 250,
           required: true,
