@@ -3,7 +3,7 @@ var eventLogger = console;
 
 
 if (Meteor.isServer) {
- eventLogger = LogManager.createLogger({logFile: 'events.log'});  
+ eventLogger = LogManager.createLogger({logFile: 'events.log'});
 }
 
 function prepareEvent(event) {
@@ -112,27 +112,27 @@ Meteor.methods({
     return csv;
   },
 
-  // IngestEventsFromFile: function(csvFile) {
-  //   // console.log(csvFile);
-  //   // for each line in csvFile
-  //   provider = parseProvider(line);
-  //   if (!isProviderExists(provider)) {
-  //     insertProvider(provider);
-  //   }
-  //   time = parseTime(line);
-  //   date = parseDate(line);
-  //   tags = parseTags(line);
-  //   engTitle = parseEnglishTitle(line);
-  //   engDesc = parseEnglishDesc(line);
-  //   hebTitle = parseHebrewTitle(line);
-  //   hebDesc = parseHebrewDesc(line);
+  IngestEventsFromFile: function(csvFile) {
+    console.log(csvFile);
+    // for each line in csvFile
+    // provider = parseProvider(line);
+    // if (!isProviderExists(provider)) {
+    //   insertProvider(provider);
+    // }
+    // time = parseTime(line);
+    // date = parseDate(line);
+    // tags = parseTags(line);
+    // engTitle = parseEnglishTitle(line);
+    // engDesc = parseEnglishDesc(line);
+    // hebTitle = parseHebrewTitle(line);
+    // hebDesc = parseHebrewDesc(line);
 
-  //   // event = new Event{
-  //   //   a = a;
-  //   //   b= b;
-  //   //   c = d;
-  //   // }
+    // event = new Event{
+    //   a = a;
+    //   b= b;
+    //   c = d;
+    // }
 
-  //   insertEvent(event);
-  // },
+    // insertEvent(event);
+  },
 });

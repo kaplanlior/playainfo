@@ -1,0 +1,52 @@
+<template name="eventDisplay">
+	<div class="jumbotron">
+		<div class="well well-lg">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<div class="text-left">{{title}}</div>
+						<div class="text-right">{{title_hebrew}}</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="text-left">{{desc}}</div>
+					<div class="text-right">{{desc_hebrew}}</div>
+					<div class="text-left">When: {{start_time}} - {{end_time}} on {{start_date}}</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<template name="allEventsPage">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">PlayaInfo</a>
+				<form class="navbar-form" role="search">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+<!-- 						<div class="input-group-btn">
+							<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+						</div> -->
+					</div>
+				</form>
+			</div>			
+		</div>
+	</nav>
+	<div class="container events-container">
+
+			{{#if Template.subscriptionsReady}}
+				{{#each events}}
+					{{> eventDisplay}}
+				{{else}}
+					No events, try adding some!
+				{{/each}}
+			{{else}}
+				Loading...
+			{{/if}}
+
+	</div>
+</template>

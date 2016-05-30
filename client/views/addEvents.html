@@ -1,73 +1,146 @@
 <template name="addEventPage">
-{{#with provider}}
+	{{#with provider}}
 	<a href="/events/{{uuid}}"><i class="fa fa-arrow-left"></i> Back to Existing events page</a>
 	<h1>Create a New Event</h1>
 	<h3>Provider: {{name}} - {{type}}</h3>
 	<div class="container">
-			{{#with event}}
-			<form id="addEvent" class="form-horizontal">
-				<div class="form-group">
-					<label for="english_title" class="col-sm-2 control-label">Title - English</label>
-					<div class="col-sm-6">
-						<input name="english_title" type="text" class="form-control" value="{{event.title}}"> 
+		{{#with event}}
+		<form id="addEvent" class="form-horizontal">
+			<div class="form-group">
+				<label for="english_title" class="col-sm-2 control-label">Title - English</label>
+				<div class="col-sm-6">
+					<input name="english_title" type="text" class="form-control" value="{{event.title}}"> 
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="hebrew_title" class="col-sm-2 control-label">Title - Hebrew</label>
+				<div class="col-sm-6">
+					<input name="hebrew_title" type="text" class="form-control" value="{{event.title_hebrew}}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="start_date0" class="col-sm-2 control-label">Start</label>
+				<div class="col-sm-4">
+					<input type="date" name="start_date" {{dateDisabled}} class="form-control" value="{{event.start_date}}">
+				</div>
+				<div class="col-sm-2">
+					<input type="time" name="start_time" {{timeDisabled}} class="form-control" value="{{event.start_time}}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="end_date0" class="col-sm-2 control-label">End</label>
+				<div class="col-sm-4">
+					<input type="date" name="end_date" {{dateDisabled}} class="form-control" value="{{event.end_date}}">
+				</div>
+				<div class="col-sm-2">
+					<input type="time" name="end_time" {{timeDisabled}} class="form-control" value="{{event.end_time}}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-4 col-sm-offset-2">
+					<div class="checkbox">
+						<label for="recurring" class="control-label">
+							<input name="recurring" type="checkbox" id="recurring" checked="{{event.recurring}}">Recurring
+						</label>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="hebrew_title" class="col-sm-2 control-label">Title - Hebrew</label>
-					<div class="col-sm-6">
-						<input name="hebrew_title" type="text" class="form-control" value="{{event.title_hebrew}}">
+				<div class="col-sm-2">
+					<div class="checkbox">
+						<label for="allDay" class="control-label">
+							<input name="allDay" type="checkbox" id="allDay" checked="{{event.all_day}}">All Day
+						</label>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="start_date0" class="col-sm-2 control-label">Start</label>
-					<div class="col-sm-4">
-						<input type="date" name="start_date" {{dateDisabled}} class="form-control" value="{{event.start_date}}">
-					</div>
-					<div class="col-sm-2">
-						<input type="time" name="start_time" {{timeDisabled}} class="form-control" value="{{event.start_time}}">
-					</div>
+			</div>
+
+			<div class="form-group">
+				<label for="english_desc" class="col-sm-2 control-label">Description - English</label>
+				<div class="col-sm-6">
+					<textarea rows="5" name="english_desc" class="form-control" value="{{event.desc}}"></textarea>
 				</div>
-				<div class="form-group">
-					<label for="end_date0" class="col-sm-2 control-label">End</label>
-					<div class="col-sm-4">
-						<input type="date" name="end_date" {{dateDisabled}} class="form-control" value="{{event.end_date}}">
-					</div>
-					<div class="col-sm-2">
-						<input type="time" name="end_time" {{timeDisabled}} class="form-control" value="{{event.end_time}}">
-					</div>
+			</div>
+			<div class="form-group">
+				<label for="hebrew_desc" class="col-sm-2 control-label">Description - Hebrew</label>
+				<div class="col-sm-6">
+					<textarea rows="5" name="hebrew_desc" class="form-control" value="{{event.desc_hebrew}}"></textarea>
 				</div>
-				
-				<div class="form-group">
-					<div class="col-sm-6 col-sm-offset-2">
-						<div class="checkbox">
-							<label for="recurring" class="control-label">
-								<input name="recurring" type="checkbox" id="recurring" checked="{{event.recurring}}"> Recurring
-							</label>
-						</div>
-					</div>
+			</div>
+
+			<div class="form-group">
+				<label for="english_desc" class="col-sm-2 control-label">Tags</label>
+<!-- 				<div class="col-sm-3"> TODO should be radio? is selection a must?
+					<label class="radio-inline"><input type="radio" value="adults" checked="{{isRadioSelected 'adults'}}" name="adults_only">Adults Only</label>
+					<label class="radio-inline"><input type="radio" value="kids" checked="{{isRadioSelected 'kids'}}" name="adults_only">Kids are Ok</label>
+				</div> -->
+				<div class="checkbox col-sm-6">
+					<label for="adults_only" class="control-label">
+						<input name="adults_only" type="checkbox" id="adults_only" checked="{{event.adults_only}}">Adults Only
+					</label>
 				</div>
-				<div class="form-group">
-					<div class="col-sm-6 col-sm-offset-2">
-						<div class="checkbox">
-							<label for="allDay" class="control-label">
-								<input name="allDay" type="checkbox" id="allDay" checked="{{event.all_day}}"> All Days
-							</label>
-						</div>
-					</div>
+				<div class="checkbox col-sm-6 col-sm-offset-2">
+					<label for="for_kids" class="control-label">
+						<input name="for_kids" type="checkbox" id="for_kids" checked="{{event.for_kids}}">For Kids
+					</label>
 				</div>
-				
-				<div class="form-group">
-					<label for="english_desc" class="col-sm-2 control-label">Description - English</label>
-					<div class="col-sm-6">
-						<textarea rows="5" name="english_desc" class="form-control" value="{{event.desc}}"></textarea>
-					</div>
+				<div class="checkbox col-sm-6 col-sm-offset-2">
+					<label for="party" class="control-label">
+						<input name="party" type="checkbox" id="party" checked="{{event.party}}">Party
+					</label>
 				</div>
-				<div class="form-group">
-					<label for="hebrew_desc" class="col-sm-2 control-label">Description - Hebrew</label>
-					<div class="col-sm-6">
-						<textarea rows="5" name="hebrew_desc" class="form-control" value="{{event.desc_hebrew}}"></textarea>
-					</div>
+				<div class="checkbox col-sm-6 col-sm-offset-2">
+					<label for="performance" class="control-label">
+						<input name="performance" type="checkbox" id="performance" checked="{{event.performance}}"> Performance
+					</label>
 				</div>
+				<div class="checkbox col-sm-6 col-sm-offset-2">
+					<label for="movie" class="control-label">
+						<input name="movie" type="checkbox" id="movie" checked="{{event.movie}}">Movie
+					</label>
+				</div>
+				<div class="checkbox col-sm-6 col-sm-offset-2">
+					<label for="game" class="control-label">
+						<input name="game" type="checkbox" id="game" checked="{{event.game}}">Game
+					</label>
+				</div>
+				<div class="checkbox col-sm-6 col-sm-offset-2">
+					<label for="workshop" class="control-label">
+						<input name="workshop" type="checkbox" id="workshop" checked="{{event.workshop}}">Workshop
+					</label>
+				</div>
+				<div class="checkbox col-sm-6 col-sm-offset-2">
+					<label for="lecture" class="control-label">
+						<input name="lecture" type="checkbox" id="lecture" checked="{{event.lecture}}">Lecture
+					</label>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+
+<!-- 				<input name="adults_only" type="checkbox" id="adults_only" checked="{{event.adults_only}}">
+				<label for="adults_only">Adults Only</label><br>
+				<input name="for_kids" type="checkbox" id="for_kids" checked="{{event.for_kids}}">
+				<label for="for_kids">For Kids</label><br>
+				<input name="party" type="checkbox" id="party" checked="{{event.party}}">
+				<label for="party">Party</label><br>
+				<input name="performance" type="checkbox" id="performance" checked="{{event.performance}}">
+				<label for="performance">Performance</label><br>
+				<input name="movie" type="checkbox" id="movie" checked="{{event.movie}}">
+				<label for="movie">Movie</label><br>
+				<input name="game" type="checkbox" id="game" checked="{{event.game}}">
+				<label for="game">Game</label><br>
+				<input name="workshop" type="checkbox" id="workshop" checked="{{event.workshop}}">
+				<label for="workshop">Workshop</label><br>
+				<input name="lecture" type="checkbox" id="lecture" checked="{{event.lecture}}">
+				<label for="lecture">Lecture</label><br> -->
+
 <!-- 			TODO other fields
 				<input name="location" type="text" value="{{defaultLocation event.location}}"> //add default helper here
 				<input name="audience" type=option> //drop down
@@ -88,5 +161,5 @@
 		</form>
 		{{/with}}
 	</div>
-{{/with}}
+	{{/with}}
 </template>

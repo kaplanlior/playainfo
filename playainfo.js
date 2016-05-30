@@ -15,7 +15,11 @@ ProviderTypesCollection = [{
   label: 'Production',
 }];
 
-defaultItemOrder = {sort: {start: -1}};
+defaultItemOrder = {
+  sort: {
+    start: -1,
+  },
+};
 
 function getProviderUuidByUrl() {
   return FlowRouter.getParam('uuid');
@@ -84,7 +88,11 @@ if (Meteor.isClient) {
   Template.mainMenu.events({
     'click .menuListContentProviders': function() {
       FlowRouter.go('viewProvidersPageRoute');
-    }
+    },
+
+    'click .menuListAddBulk': function() {
+      FlowRouter.go('addBulkPageRoute');
+    },
   });
 
   Template.viewEventsPage.events({
@@ -151,11 +159,14 @@ if (Meteor.isClient) {
     events: function() {
       instance = Template.instance();
       filter = instance.state.get('filter');
-      query = {};
+      query = {
+        $and: [
+          {'uuid': this.uuid},
+        ],
+      };
       if (filter) {
         regex = new RegExp('^.*' + filter + '.*', 'i');
-        query = {
-          'uuid': this.uuid,
+        query['$and'].push({
           $or: [{
             title: {
               $regex: regex,
@@ -165,13 +176,55 @@ if (Meteor.isClient) {
               $regex: regex,
             },
           }],
-        };
+        });
       }
       return EventsCollection.find(query, {
         sort: {
           start: -1,
         },
       });
+    },
+  });
+
+  Template.allEventsPage.onCreated(function() {
+    this.state = new ReactiveDict();
+  });
+
+  Template.allEventsPage.helpers({
+    events: function() {
+      instance = Template.instance();
+      filter = instance.state.get('filter');
+      query = {};
+      if (filter) {
+        regex = new RegExp('^.*' + filter + '.*', 'i');
+        query = {
+          $or: [{
+            title: {
+              $regex: regex,
+            },
+          }, {
+            title_hebrew: {
+              $regex: regex,
+            },
+          }, {
+            desc: {
+              $regex: regex,
+            },
+          }, {
+            desc_hebrew: {
+              $regex: regex,
+            },
+          }],
+        };
+      }
+
+      return EventsCollection.find(query, defaultItemOrder);
+    },
+  });
+
+  Template.allEventsPage.events({
+    'input .input-group': function(event, instance) {
+      instance.state.set('filter', event.target.value);
     },
   });
 
@@ -390,6 +443,7 @@ if (Meteor.isClient) {
       console.log('Form valid: ' + valid);
       return valid;
     },
+
     'submit form': function(formEvent) {
       formEvent.preventDefault();
 
@@ -414,6 +468,16 @@ if (Meteor.isClient) {
 
       FlowRouter.go('eventsPageRoute', {
         uuid: uuid,
+      });
+    },
+  });
+
+  Template.addBulkPage.events({
+    'change .importButton': function(event, instance) {
+      Papa.parse(event.target.files[0], {
+        complete: function(results) {
+          Meteor.call('IngestEventsFromFile', results);
+        },
       });
     },
   });

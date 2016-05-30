@@ -8,9 +8,9 @@
         <button class="btn btn-sm btn-primary providerEditButton" id="edit"><i class="fa fa-pencil"></i>&nbsp; Edit</button>
         <button class="btn btn-sm btn-success providerViewEventsButton" id="events"><i class="fa fa-calendar"></i>&nbsp; View Events</button>
         <button class="btn btn-sm btn-danger providersDeleteButton" id="delete"><i class="fa fa-trash"></i>&nbsp; Delete</button>
-     </div>
-   </td>
- </tr>
+      </div>
+    </td>
+  </tr>
 </template>
 
 <template name="viewProvidersPage">
@@ -28,7 +28,6 @@
         </button>
         <button type="button" class="form-control btn btn-sm btn-success providersExport">
           <i class="fa fa-floppy-o"></i> Export
-
         </button>
         <button type="button" id="deleteAll" class="form-control btn btn-danger providersDeleteAllButton {{#unless providers.count}}disabled{{/unless}}">
           <i class="fa fa-remove"></i> Delete all
@@ -38,23 +37,23 @@
     <div>
       <table class="table table-condensed table-striped table-hover">
         <thead>
-        <tr>
-          <th id="en-name">English Name</th>    
-          <th id="he-name">Hebrew Name</th>
-          <th>Content Group</th>
-          <th><div class="pull-right">Actions</div></th>
-        </tr>
+          <tr>
+            <th id="en-name">English Name</th>    
+            <th id="he-name">Hebrew Name</th>
+            <th>Content Group</th>
+            <th><div class="pull-right">Actions</div></th>
+          </tr>
         </thead>
         <tbody>
-        {{#if Template.subscriptionsReady}}
+          {{#if Template.subscriptionsReady}}
           {{#each providers}}
-            {{> provider}}
+          {{> provider}}
           {{else}}
-            No providers, maybe you should do something about it.
+          No providers, maybe you should do something about it.
           {{/each}}
-        {{else}}
+          {{else}}
           Loading...
-        {{/if}}
+          {{/if}}
         </tbody>
       </table> 
     </div>

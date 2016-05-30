@@ -15,3 +15,12 @@ select.error, textarea.error, input.error {
     color: #d9534f;
     display:block;
 }
+
+.events-container {
+  min-height: 2000px;
+  padding-top: 100px;
+}
+
+.search {
+  display: inline-block;
+}

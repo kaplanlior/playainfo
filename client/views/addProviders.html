@@ -3,35 +3,35 @@
 	<a href="/providers"><i class="fa fa-arrow-left"></i> Back to Providers List</a>
 	<h1>{{ action }} Content Provider {{provider.name}}</h1>
 	{{> mainMenu isProviders="true"}}
-	<div class="form-container well">
+	<div class="form-container well col-sm-6">
 		<form class="form-horizontal addProvider">
-				{{#if Template.subscriptionsReady}}
+			{{#if Template.subscriptionsReady}}
+			{{else}}
+			Loading...
+			{{/if}}
+			<div class="form-group">
+				<label for="englishName">English Name</label>
+				<input name="englishName" type="text" class="form-control" placeholder="English name" value="{{provider.name}}">
+			</div>
+			<div class="form-group">
+				<label for="hebrewName">Hebrew Name</label>
+				<input name="hebrewName" type="text" class="form-control" placeholder="Hebrew name" value="{{provider.nameHebrew}}">
+			</div>
+			<div class="form-group">
+				<label for="select">Type</label>
+				<select name="typeSelector" class="form-control">
+					{{#each option in options}}
+					<option value="{{option.value}}" selected={{isSelected option.value}}>{{option.label}}</option> 
+					{{/each}}
+				</select>
+			</div>
+			<div class="form-group">
+				{{#if isEdit}}
+				<button type="submit" class="btn btn-primary saveProvider">Save Changes</button>
 				{{else}}
-				Loading...
-				{{/if}}
-				<div class="form-group">
-					<label for="englishName">English Name</label>
-					<input name="englishName" type="text" class="form-control" placeholder="English name" value="{{provider.name}}">
-				</div>
-				<div class="form-group">
-					<label for="hebrewName">Hebrew Name</label>
-					<input name="hebrewName" type="text" class="form-control" value="{{provider.nameHebrew}}">
-				</div>
-				<div class="form-group">
-					<label for="select">Type</label>
-					<select name="typeSelector" class="form-control">
-						{{#each option in options}}
-						<option value="{{option.value}}" selected={{isSelected option.value}}>{{option.label}}</option> 
-						{{/each}}
-					</select>
-				</div>
-				<div class="form-group">
-					{{#if isEdit}}
-					<button type="submit" class="btn btn-primary saveProvider">Save Changes</button>
-					{{else}}
-					<button type="submit" class="btn btn-primary addProvider">Create</button>
-					{{/if}} 
-				</div>
+				<button type="submit" class="btn btn-primary addProvider">Create</button>
+				{{/if}} 
+			</div>
 		</form>
 	</div>
 	{{/with}}

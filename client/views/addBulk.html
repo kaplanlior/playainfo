@@ -1,0 +1,12 @@
+<template name="addBulkPage">
+	<h1>Import</h1>
+	{{> mainMenu isAddBulk="true"}}
+	<div class="container action-bar">
+		<div class="col-sm-3">
+			<label class="btn btn-sm btn-primary importEvents importButton" name="importButton">
+				<i class="fa fa-magic"></i> Import Events... 
+				<input type="file" accept="text/csv" style="display: none;">
+			</label>
+		</div>
+	</div>
+</template>

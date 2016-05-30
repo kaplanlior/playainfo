@@ -63,7 +63,17 @@ FlowRouter.route('/provider/', {
   action: function(params) {
     BlazeLayout.render('adminLayout', {
       content: 'addProvidersPage',
-      action: 'Add'
+      action: 'Add',
+    });
+  },
+});
+
+FlowRouter.route('/addBulk/', {
+  name: 'addBulkPageRoute',
+  action: function(params) {
+    BlazeLayout.render('adminLayout', {
+      content: 'addBulkPage',
+      action: 'Add Bulk',
     });
   },
 });
@@ -77,7 +87,7 @@ FlowRouter.route('/provider/:id?', {
   action: function(params) {
     BlazeLayout.render('adminLayout', {
       content: 'addProvidersPage',
-      action: 'Edit'
+      action: 'Edit',
     });
   },
 });
@@ -88,3 +98,12 @@ FlowRouter.route('/provider/:id?', {
 //     BlazeLayout.render('mainLayout', {content: 'viewEventsPageTest'});
 //   },
 // });
+
+FlowRouter.route('/all/', {
+  name: 'allRoute',
+  action: function(params) {
+    BlazeLayout.render('mainLayout', {
+      content: 'allEventsPage',
+    });
+  },
+});

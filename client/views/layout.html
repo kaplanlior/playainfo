@@ -13,9 +13,9 @@
 
 <template name="mainMenu">
 	<ul class="nav nav-tabs">
-		<li role="presentation" class="menuListContentProviders {{#if isProviders}}active{{/if}}"><a href="#">Content Providers</a></li>
-		<li role="presentation" class="disabled {{#if isAddProviderBulk}}active{{/if}}"><a href="/">Add Bulk</a></li>
-		<li role="presentation" class="disabled {{#if isGroups}}active{{/if}}"><a href="/">Groups</a></li>
+		<li role="presentation" class="menuListContentProviders {{#if isProviders}}active{{/if}}"><a>Content Providers</a></li>
+		<li role="presentation" class="menuListAddBulk {{#if isAddBulk}}active{{/if}}"><a>Add Bulk</a></li>
+		<!-- <li role="presentation" class="disabled {{#if isGroups}}active{{/if}}"><a>Groups</a></li> -->
 		<!-- {{> loginButtons align="right"}} -->
 	</ul>
 </template>
